@@ -25,7 +25,7 @@
             }
           )
         ];
-        wavfiylib = "${toString ./.}";
+        wavfiylib = builtins.toString ./. + "/x86_64-unkown-linux";
         pkgs = import nixpkgs {
           inherit system overlays;
         };
@@ -42,18 +42,14 @@
             cmake
             gfortran9
             openblas
-            crossPkgs.openblas
-            crossPkgs.openssl
+            # crossPkgs.openblas
+            # crossPkgs.openssl
             mold
             gcc
-            llvmPackages.openmp
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
           LD_LIBRARY_PATH = lib.makeLibraryPath [
             wavfiylib
-            oneDNN
-            llvmPackages.openmp
-
           ];
           shellHook = ''
             export LIBCLANG_PATH="${pkgs.libclang.lib}/lib"
@@ -63,10 +59,10 @@
             export ANDROID_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake"
             export OPENBLAS_INCLUDE_DIR="${crossPkgs.openblas.dev}/include"
             export OPENBLAS_LIBRARY="${crossPkgs.openblas}/lib/libopenblas.so"
-            export OPENSSL_LIB_DIR="${crossPkgs.openssl.out}/lib"
-            export OPENSSL_INCLUDE_DIR="${crossPkgs.openssl.dev}/include"
-            export CC="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang"
-            export CXX="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++"
+            # export OPENSSL_LIB_DIR="${crossPkgs.openssl.out}/lib"
+            # export OPENSSL_INCLUDE_DIR="${crossPkgs.openssl.dev}/include"
+            # export CC="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang"
+            # export CXX="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++"
             export JAVA_HOME="${jdk11.home}"
           '';
         };
