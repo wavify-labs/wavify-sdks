@@ -1,5 +1,7 @@
+use env_logger::Env;
 use std::env;
 use std::ffi::CString;
+use std::os::raw::c_float;
 use std::time::Instant;
 
 use wavify_asr::*;
@@ -16,10 +18,13 @@ fn main() {
         (&args[1] as &str, &args[2] as &str)
     };
 
+    env_logger::from_env(Env::default().default_filter_or("debug")).init();
+
     unsafe {
         let model_path_c = CString::new(model_path).expect("CString::new failed");
         let model = create_model(model_path_c.as_ptr());
 
+        test_float(0.123 as c_float);
         let data = from_file(file_path);
         let now = Instant::now();
         let raw_result = process(model, data);

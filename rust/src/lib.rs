@@ -2,13 +2,16 @@ use std::ffi::{CStr, CString};
 use std::os::raw::{c_char, c_float};
 
 use hound::WavReader;
+#[macro_use]
+extern crate log;
+use log::Level;
 
 #[repr(C)]
 pub struct Whisper {}
 
 #[repr(C)]
 pub struct FloatArray {
-    pub data: *const c_float,
+    pub data: *const f32,
     pub len: usize,
 }
 
@@ -23,6 +26,7 @@ extern "C" {
     pub fn create_model(model_path: *const c_char) -> *mut Whisper;
     pub fn destroy_model(model: *mut Whisper);
     pub fn process(model: *const Whisper, data: FloatArray) -> StringArray;
+    pub fn test_float(n: c_float);
 }
 
 pub fn from_file(filename: &str) -> FloatArray {
@@ -35,11 +39,14 @@ pub fn from_file(filename: &str) -> FloatArray {
         float_data.push(float_sample);
     }
 
-    let data: Vec<c_float> = float_data.iter().map(|v| *v as c_float).collect();
-    FloatArray {
+    let data: Vec<f32> = float_data.iter().map(|v| *v as f32).collect();
+    log!(Level::Debug, "Audio codec: {:?}", &data[..10]);
+    let out = FloatArray {
         data: data.as_ptr(),
         len: data.len(),
-    }
+    };
+    std::mem::forget(data); // todo: deal with memory leak
+    out
 }
 
 pub fn free_strings(array: StringArray) -> Vec<String> {
