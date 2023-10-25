@@ -7,7 +7,7 @@ extern crate log;
 use log::Level;
 
 #[repr(C)]
-pub struct Whisper {}
+pub struct Model {}
 
 #[repr(C)]
 pub struct FloatArray {
@@ -15,17 +15,10 @@ pub struct FloatArray {
     pub len: usize,
 }
 
-#[repr(C)]
-#[derive(Debug)]
-pub struct StringArray {
-    data: *const *mut c_char,
-    len: usize,
-}
-
 extern "C" {
-    pub fn create_model(model_path: *const c_char) -> *mut Whisper;
-    pub fn destroy_model(model: *mut Whisper);
-    pub fn process(model: *const Whisper, data: FloatArray) -> StringArray;
+    pub fn create_model(model_path: *const c_char) -> *mut Model;
+    pub fn destroy_model(model: *mut Model);
+    pub fn process(model: *const Model, data: FloatArray) -> *mut c_char;
     pub fn test_float(n: c_float);
 }
 
@@ -45,29 +38,14 @@ pub fn from_file(filename: &str) -> FloatArray {
         data: data.as_ptr(),
         len: data.len(),
     };
-    std::mem::forget(data); // todo: deal with memory leak
+    std::mem::forget(data); // TODO: deal with memory leak
     out
 }
 
-pub fn free_strings(array: StringArray) -> Vec<String> {
-    let c_strings = unsafe {
-        assert!(!array.data.is_null());
-        Vec::from_raw_parts(array.data as *mut _, array.len, array.len)
+pub fn read_result(ffi_result: *mut c_char) -> String {
+    let result_string = unsafe {
+        let c_str = CStr::from_ptr(ffi_result);
+        c_str.to_string_lossy().into_owned()
     };
-
-    let strings: Vec<String> = c_strings
-        .iter()
-        .map(|&c_str| unsafe {
-            let c_str = CStr::from_ptr(c_str);
-            c_str.to_string_lossy().into_owned()
-        })
-        .collect();
-
-    for &c_str in &c_strings {
-        unsafe {
-            let _ = CString::from_raw(c_str as *mut _);
-        }
-    }
-
-    strings
+    result_string
 }
