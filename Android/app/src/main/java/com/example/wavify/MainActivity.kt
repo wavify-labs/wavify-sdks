@@ -12,12 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.wavify.ui.theme.WavifyTheme
+import java.io.File
+
+
+
 
 class MainActivity : ComponentActivity() {
     init {
         try {
-            System.loadLibrary("omp")
-            System.loadLibrary("wavify_core_release")
+            System.loadLibrary("tensorflowlite_c")
+            System.loadLibrary("wavify_core")
         } catch (err: Error) {
             Log.e("wavfiy", "$err")
         }
@@ -28,8 +32,11 @@ class MainActivity : ComponentActivity() {
         val utils = Utils(applicationContext)
         utils.copyAssetsToInternalStorage()
         val rustOutput = greeter.sayHello("foo")
-        val modelFilesPath = applicationContext.filesDir.absolutePath
-        val model = greeter.createModel(modelFilesPath)
+        val modelPath = File(applicationContext.filesDir, "whisper-tiny.tflite").absolutePath
+        val tokenizerPath = File(applicationContext.filesDir, "tokenizer.json").absolutePath
+        val modelPointer = greeter.createModel(modelPath, tokenizerPath)
+        val data = floatArrayOf(1.0f, 2.0f, 3.0f)
+        val result = greeter.process(data, modelPointer)
         setContent {
             WavifyTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,7 +44,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    Greeting(result)
                 }
             }
         }

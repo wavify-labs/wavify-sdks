@@ -1,19 +1,9 @@
 package com.example.wavify;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class RustGreetings {
+
     private Context context;
     public RustGreetings(Context context) {
         this.context = context;
@@ -24,10 +14,14 @@ public class RustGreetings {
         return greeting(to);
     }
 
-    private static native String createModelFfi(final String model);
-    public String createModel(String dirPath) {
-        return createModelFfi(dirPath);
+    private static native long createModelFfi(final String modelPath, final String tokenizerPath);
+    public long createModel(String modelPath, String tokenizerPath) {
+        return createModelFfi(modelPath, tokenizerPath);
     }
+
+    private static native String processFfi(final float[] data, final long model);
+    public String process(float[] data, long model) {return processFfi(data, model);};
+
 }
 
 
