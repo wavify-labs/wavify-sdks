@@ -9,12 +9,10 @@ import java.io.File
 import java.io.RandomAccessFile
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.nio.FloatBuffer
 import java.util.concurrent.atomic.AtomicBoolean
 
 class Audio {
     companion object {
-        private const val bytesPerFloat = 4
         private const val sampleRate = 16000
         private const val maxAudioLengthInSeconds = 30
 
@@ -44,9 +42,9 @@ class Audio {
                 AudioRecord.getMinBufferSize(
                     sampleRate,
                     AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_FLOAT
+                    AudioFormat.ENCODING_PCM_16BIT
                 ),
-                2 * recordingChunkLengthInSeconds * sampleRate * bytesPerFloat
+                2 * recordingChunkLengthInSeconds * sampleRate
             )
 
             val audioRecord = AudioRecord.Builder()
@@ -54,7 +52,7 @@ class Audio {
                 .setAudioFormat(
                     AudioFormat.Builder()
                         .setSampleRate(sampleRate)
-                        .setEncoding(AudioFormat.ENCODING_PCM_FLOAT)
+                        .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
                         .setChannelMask(AudioFormat.CHANNEL_IN_MONO)
                         .build()
                 )
@@ -62,26 +60,26 @@ class Audio {
                 .build()
 
             try {
-                val floatAudioData = FloatArray(maxAudioLengthInSeconds * sampleRate) { 0.0f }
-                var floatAudioDataOffset = 0
+                val pcmAudioData = ShortArray(maxAudioLengthInSeconds * sampleRate) { 0 }
+                var pcmAudioDataOffset = 0
 
                 audioRecord.startRecording()
 
-                while (!stopRecordingFlag.get() && floatAudioDataOffset < floatAudioData.size) {
+                while (!stopRecordingFlag.get() && pcmAudioDataOffset < pcmAudioData.size) {
                     val numFloatsToRead = minOf(
                         recordingChunkLengthInSeconds * sampleRate,
-                        floatAudioData.size - floatAudioDataOffset
+                        pcmAudioData.size - pcmAudioDataOffset
                     )
 
                     val readResult = audioRecord.read(
-                        floatAudioData, floatAudioDataOffset, numFloatsToRead,
+                        pcmAudioData, pcmAudioDataOffset, numFloatsToRead,
                         AudioRecord.READ_BLOCKING
                     )
 
-                    Log.d(MainActivity.TAG, "AudioRecord.read(float[], ...) returned $readResult")
+                    Log.d(MainActivity.TAG, "AudioRecord.read(int[], ...) returned $readResult")
 
                     if (readResult >= 0) {
-                        floatAudioDataOffset += readResult
+                        pcmAudioDataOffset += readResult
                     } else {
                         throw RuntimeException("AudioRecord.read() returned error code $readResult")
                     }
@@ -89,7 +87,7 @@ class Audio {
 
                 audioRecord.stop()
 
-                return floatAudioData
+                return pcmAudioData.map { it.toFloat() / Short.MAX_VALUE }.toFloatArray()
 
             } finally {
                 if (audioRecord.recordingState == AudioRecord.RECORDSTATE_RECORDING) {

@@ -23,8 +23,6 @@ class MainActivity : AppCompatActivity() {
 
     private val wavifyASR: WavifyASR by lazy {WavifyASR(applicationContext)}
     private val modelPointer: Long by lazy {
-        val utils = Utils(applicationContext)
-        utils.copyAssetsToInternalStorage()
         val modelPath = File(applicationContext.filesDir, "whisper-tiny.tflite").absolutePath
         val tokenizerPath = File(applicationContext.filesDir, "tokenizer.json").absolutePath
         val modelPointer = wavifyASR.createModel(modelPath, tokenizerPath) // TODO: error handling
@@ -48,13 +46,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
 
+        val utils = Utils(applicationContext)
+        utils.copyAssetsToInternalStorage()
+
         usePrerecordedAudioButton.setOnClickListener {
 
             disableAudioButtons()
 
             workerThreadExecutor.submit {
                 try {
-                    val audioFile = File(applicationContext.filesDir, "ml.wav")
+                    val audioFile = File(applicationContext.filesDir, "device.wav")
                     val audioFloats = Audio.fromWavFile(audioFile)
 
                     val start = System.currentTimeMillis()

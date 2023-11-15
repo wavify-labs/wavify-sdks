@@ -9,17 +9,22 @@ use wavify_asr::*;
 fn main() {
     let args: Vec<String> = env::args().collect();
 
-    let (model_path, file_path) = if args.len() < 3 {
-        ("../../models/", "../../ml.wav")
+    let (model_path, tokenizer_path, file_path) = if args.len() < 4 {
+        (
+            "../../models/whisper-tiny-en.tflite",
+            "../../models/tokenizer.json",
+            "../../assets/english.wav",
+        )
     } else {
-        (&args[1] as &str, &args[2] as &str)
+        (&args[1] as &str, &args[2] as &str, &args[3] as &str)
     };
 
     env_logger::from_env(Env::default().default_filter_or("debug")).init();
 
     unsafe {
         let model_path_c = CString::new(model_path).expect("CString::new failed");
-        let model = create_model(model_path_c.as_ptr());
+        let tokenizer_path_c = CString::new(tokenizer_path).expect("CString::new failed");
+        let model = create_model(model_path_c.as_ptr(), tokenizer_path_c.as_ptr());
 
         let data = from_file(file_path);
         let now = Instant::now();
