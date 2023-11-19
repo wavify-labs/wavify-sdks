@@ -1,5 +1,5 @@
 {
-  description = "Rust developtment environment";
+  description = "Wavify-sdk developtment environment";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -29,6 +29,14 @@
           inherit system overlays;
         };
         crossPkgs = import nixpkgs { system = "aarch64-linux"; };
+        pythonPackages = pkgs.python310Packages;
+        python = pythonPackages.python;
+        pythonDeps = p: with p; [
+          wheel
+          setuptools
+          twine
+          pip
+        ];
       in
       with pkgs;
       {
@@ -44,6 +52,7 @@
             mold
             gcc
             nix-tree
+            (python.withPackages pythonDeps)
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
           shellHook = ''

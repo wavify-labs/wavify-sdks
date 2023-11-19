@@ -6,3 +6,6 @@ target/
 
 # android
 assets/
+
+# python
+venv/
