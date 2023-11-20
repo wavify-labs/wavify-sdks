@@ -19,7 +19,6 @@ extern "C" {
     pub fn create_model(model_path: *const c_char, tokenizer_path: *const c_char) -> *mut Model;
     pub fn destroy_model(model: *mut Model);
     pub fn process(model: *const Model, data: FloatArray) -> *mut c_char;
-    pub fn test_float(n: c_float);
 }
 
 pub fn from_file(filename: &str) -> FloatArray {

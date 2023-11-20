@@ -1,7 +1,8 @@
 import ctypes
-from typing import List
 from pathlib import Path
 from ctypes import c_char_p, c_uint64, POINTER, c_float, c_uint8
+import wave
+import struct
 
 class FloatArray(ctypes.Structure):
     _fields_ = [
@@ -41,11 +42,17 @@ class WavifyASR:
     def destroy_model(self, model: POINTER(WavifyASRModel)):
         self.lib.destroy_model(model)
 
-    def process(self, model: POINTER(WavifyASRModel), data: List(float)):
+    def process(self, model: POINTER(WavifyASRModel), data):
         arr = (c_float * len(data))(*data)
         float_array = FloatArray(arr, len(data))
         return self.lib.process(model, float_array).decode("utf-8")
     
     def process_file(self, model: POINTER(WavifyASRModel), file: Path):
-        pass
+        """Process a mono, 16bit wave file"""
+        wavefile = wave.open(str(file), 'r')
+        n = wavefile.getnframes()
+        wavedata = wavefile.readframes(n)
+        data = list(struct.unpack(f"<{n}h", wavedata))
+        float_data = [sample / 32767 for sample in data] # TODO: maybe use numpy here
+        return self.process(model, float_data)
     
