@@ -19,6 +19,7 @@ extern "C" {
     pub fn create_model(model_path: *const c_char, tokenizer_path: *const c_char) -> *mut Model;
     pub fn destroy_model(model: *mut Model);
     pub fn process(model: *const Model, data: FloatArray) -> *mut c_char;
+    pub fn free_result(result: *mut c_char);
 }
 
 pub fn from_file(filename: &str) -> FloatArray {
@@ -37,14 +38,15 @@ pub fn from_file(filename: &str) -> FloatArray {
         data: data.as_ptr(),
         len: data.len(),
     };
-    std::mem::forget(data); // TODO: deal with memory leak
     out
 }
 
-pub fn read_result(ffi_result: *mut c_char) -> String {
+// TODO: Call destroy method after reading
+pub unsafe fn read_result(ffi_result: *mut c_char) -> String {
     let result_string = unsafe {
         let c_str = CStr::from_ptr(ffi_result);
         c_str.to_string_lossy().into_owned()
     };
+    free_result(ffi_result);
     result_string
 }

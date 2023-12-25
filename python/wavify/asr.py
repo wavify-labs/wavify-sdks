@@ -30,7 +30,7 @@ class WavifyASR:
         self.lib.create_model.argtypes = [c_char_p, c_char_p]
         self.lib.create_model.restype = POINTER(WavifyASRModel)
 
-        self.lib.destroy_model.argtypes = [POINTER(c_uint8)]
+        self.lib.destroy_model.argtypes = [POINTER(WavifyASRModel)]
         self.lib.destroy_model.restype = None
 
         self.lib.process.argtypes = [POINTER(WavifyASRModel), FloatArray]

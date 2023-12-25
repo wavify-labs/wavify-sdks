@@ -32,10 +32,22 @@
         pythonPackages = pkgs.python310Packages;
         python = pythonPackages.python;
         pythonDeps = p: with p; [
+          # sdk
           wheel
           setuptools
           twine
+          # demo
           pip
+          # benchmark
+          soundfile
+          inflect
+          matplotlib
+          numpy
+          pytube
+          requests
+          editdistance
+          more-itertools
+          regex
         ];
       in
       with pkgs;
@@ -52,9 +64,14 @@
             mold
             gcc
             nix-tree
+            ffmpeg
+            sox
             (python.withPackages pythonDeps)
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
+          LD_LIBRARY_PATH = lib.makeLibraryPath [
+            pkgs.stdenv.cc.cc.lib # libstdc++.so.6
+          ];
           shellHook = ''
             export LIBCLANG_PATH="${pkgs.libclang.lib}/lib"
             export ANDROID_HOME="${android-sdk}/share/android-sdk"

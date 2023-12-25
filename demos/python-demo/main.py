@@ -10,3 +10,5 @@ print(result_data)
 
 result_file = lib.process_file(model, Path(__file__).parent.parent.parent / "assets" / "english.wav")
 print(result_file)
+
+lib.destroy_model(model)
