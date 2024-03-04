@@ -7,7 +7,7 @@ extern crate log;
 use log::Level;
 
 #[repr(C)]
-pub struct Model {}
+pub struct SttEngine {}
 
 #[repr(C)]
 pub struct FloatArray {
@@ -16,9 +16,9 @@ pub struct FloatArray {
 }
 
 extern "C" {
-    pub fn create_model(model_path: *const c_char, tokenizer_path: *const c_char) -> *mut Model;
-    pub fn destroy_model(model: *mut Model);
-    pub fn process(model: *const Model, data: FloatArray) -> *mut c_char;
+    pub fn create_stt_engine(model_path: *const c_char) -> *mut SttEngine;
+    pub fn destroy_stt_engine(model: *mut SttEngine);
+    pub fn stt(model: *mut SttEngine, data: FloatArray) -> *mut c_char;
     pub fn free_result(result: *mut c_char);
 }
 

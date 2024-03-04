@@ -19,10 +19,6 @@ fn main() {
     if !has_linked {
         panic!("Linking dynamic library failed")
     }
-    let has_linked_tflitec = link_library("tensorflowlite_c", &lib_path);
-    if !has_linked_tflitec {
-        panic!("Linking tflitec failed")
-    }
 }
 
 fn link_library<T: std::fmt::Display>(name: T, search_path: &PathBuf) -> bool {

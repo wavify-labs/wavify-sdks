@@ -147,7 +147,7 @@ name = "rust-demo"
 version = "0.1.0"
 dependencies = [
  "env_logger",
- "wavify-asr",
+ "wavify",
 ]
 
 [[package]]
@@ -173,7 +173,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "wavify-asr"
+name = "wavify"
 version = "0.1.0"
 dependencies = [
  "hound",

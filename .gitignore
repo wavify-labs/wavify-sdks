@@ -9,3 +9,6 @@ assets/
 
 # python
 venv/
+
+# models
+*.safetensors
