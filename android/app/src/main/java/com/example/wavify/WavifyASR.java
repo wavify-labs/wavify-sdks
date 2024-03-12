@@ -9,10 +9,11 @@ public class WavifyASR {
         this.context = context;
     }
 
-    private static native long createModelFfi(final String modelPath, final String tokenizerPath);
-    public long createModel(String modelPath, String tokenizerPath) {
-        return createModelFfi(modelPath, tokenizerPath);
+    private static native long createModelFfi(final String modelPath);
+    public long createModel(String modelPath) {
+        return createModelFfi(modelPath);
     }
+
     // TODO: implement destoryModel
 
     private static native String processFfi(final float[] data, final long model);

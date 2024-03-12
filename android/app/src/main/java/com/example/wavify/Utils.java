@@ -26,7 +26,7 @@ public class Utils {
 
         if (files != null) {
             for (String filename : files) {
-                if (Objects.equals(filename, "images") || Objects.equals(filename, "webkit")) {
+                if (Objects.equals(filename, "images") || Objects.equals(filename, "webkit") || Objects.equals(filename, "geoid_height_map")) {
                     continue;
                 }
                 InputStream in = context.getAssets().open(filename);
