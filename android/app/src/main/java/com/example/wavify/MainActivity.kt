@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
     private val wavifyASR: WavifyASR by lazy {WavifyASR(applicationContext)}
     private val modelPointer: Long by lazy {
-        val modelPath = File(applicationContext.filesDir, "model.safetensors").absolutePath
+        val modelPath = File(applicationContext.filesDir, "whisper-tiny-en.tflite").absolutePath
         val modelPointer = wavifyASR.createModel(modelPath) // TODO: error handling
         Log.d(TAG, "Loaded model")
         modelPointer
@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
     init { // TODO: Whats first, the init or the attribute initialization from above?
         try {
             System.loadLibrary("wavify_core")
+            System.loadLibrary("tensorflowlite_c")
         } catch (err: Error) {
             Log.e(TAG, "$err")
         }
