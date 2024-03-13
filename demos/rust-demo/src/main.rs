@@ -10,7 +10,10 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     let (model_path, file_path) = if args.len() < 3 {
-        ("../../models/model.safetensors", "../../assets/english.wav")
+        (
+            "../../models/whisper-tiny-en.tflite",
+            "../../assets/english.wav",
+        )
     } else {
         (&args[1] as &str, &args[2] as &str)
     };
