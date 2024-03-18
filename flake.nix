@@ -15,7 +15,7 @@
           (import rust-overlay)
           (self: super: {
             rustToolchain = super.rust-bin.stable.latest.default.override {
-              extensions = [ "rust-src" ];
+              extensions = [ "rust-src" "rust-analyzer"];
               targets = [ "armv7-linux-androideabi" "aarch64-linux-android" "i686-linux-android" "x86_64-unknown-linux-gnu" ];
             };
           })

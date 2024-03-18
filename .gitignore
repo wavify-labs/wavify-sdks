@@ -10,5 +10,5 @@ assets/
 # python
 venv/
 
-# large binary blobs
-model.safetensors
+# models
+*.safetensors
