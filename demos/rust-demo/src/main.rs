@@ -12,7 +12,10 @@ fn main() {
     let (model_path, file_path) = if args.len() < 3 {
         (
             "../../models/whisper-tiny-en.tflite",
-            "../../assets/english.wav",
+            "../../assets/samples_gb1.wav",
+            // "../../assets/samples_gb1_small.wav",
+            // "../../assets/samples_gb1_tiny.wav",
+            // "../../assets/english.wav",
         )
     } else {
         (&args[1] as &str, &args[2] as &str)

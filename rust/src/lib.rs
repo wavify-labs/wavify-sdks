@@ -33,12 +33,22 @@ pub fn from_file(filename: &str) -> FloatArray {
     }
 
     let data: Vec<f32> = float_data.iter().map(|v| *v as f32).collect();
-    log!(Level::Debug, "Audio codec: {:?}", &data[..10]);
-    let out = FloatArray {
-        data: data.as_ptr(),
-        len: data.len(),
-    };
-    out
+    log!(
+        Level::Debug,
+        "Audio codec: {:?} with len: {}",
+        &data[..10],
+        data.len()
+    );
+
+    // data under pointer needs to outlive the function
+    let data_boxed = Box::new(data);
+    let data_ptr = Box::leak(data_boxed.clone()).as_ptr();
+    let data_len = data_boxed.len();
+
+    FloatArray {
+        data: data_ptr,
+        len: data_len,
+    }
 }
 
 // TODO: Call destroy method after reading
