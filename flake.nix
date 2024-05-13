@@ -67,6 +67,7 @@
             ffmpeg
             sox
             (python.withPackages pythonDeps)
+            just
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
           LD_LIBRARY_PATH = lib.makeLibraryPath [

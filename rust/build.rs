@@ -3,7 +3,10 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 fn main() {
-    let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("lib/");
+    let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap())
+        .parent()
+        .unwrap()
+        .join("lib/");
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     let lib_out_dir = out_dir.join("lib/");
