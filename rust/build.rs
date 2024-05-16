@@ -13,6 +13,7 @@ fn main() {
     let lib_subdir = match target_os.as_str() {
         "linux" => "x86_64-unknown-linux-gnu",
         "android" => "aarch64-linux-android",
+        "windows" => "x86_64-pc-windows-gnu",
         _ => todo!(),
     };
 
@@ -32,7 +33,11 @@ fn main() {
 }
 
 fn link_library<T: std::fmt::Display>(name: T, search_path: &PathBuf) -> bool {
-    let libname = format!("lib{name}.so");
+    let libname = if cfg!(target_os = "windows") {
+        format!("{name}.dll")
+    } else {
+        format!("lib{name}.so")
+    };
     if let Some(p) = find_library(&libname, search_path) {
         println!("cargo:rustc-link-search={}", p.display());
         println!("cargo:rustc-link-lib={name}");
