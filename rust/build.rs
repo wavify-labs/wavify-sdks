@@ -9,21 +9,23 @@ fn main() {
         .join("lib/");
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    let lib_out_dir = out_dir.join("lib/");
-    copy_dir(dep_dir, &lib_out_dir).unwrap();
-
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
-    let lib_path = match target_os.as_str() {
-        "linux" => lib_out_dir.join("x86_64-unknown-linux-gnu"),
-        "android" => lib_out_dir.join("aarch64-linux-android"),
+    let lib_subdir = match target_os.as_str() {
+        "linux" => "x86_64-unknown-linux-gnu",
+        "android" => "aarch64-linux-android",
         _ => todo!(),
     };
-    let has_linked = link_library("wavify_core", &lib_path);
+
+    let lib_dir = dep_dir.join(lib_subdir);
+    let lib_out_dir = out_dir.join("lib/").join(lib_subdir);
+    copy_dir(&lib_dir, &lib_out_dir).unwrap();
+
+    let has_linked = link_library("wavify_core", &lib_out_dir);
     if !has_linked {
         panic!("Linking dynamic library failed")
     }
 
-    let has_linked_tflitec = link_library("tensorflowlite_c", &lib_path);
+    let has_linked_tflitec = link_library("tensorflowlite_c", &lib_out_dir);
     if !has_linked_tflitec {
         panic!("Linking tflitec failed")
     }
