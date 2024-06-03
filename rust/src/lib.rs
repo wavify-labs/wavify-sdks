@@ -16,7 +16,7 @@ pub struct FloatArray {
 }
 
 extern "C" {
-    pub fn create_stt_engine(model_path: *const c_char) -> *mut SttEngine;
+    pub fn create_stt_engine(model_path: *const c_char, api_key: *const c_char) -> *mut SttEngine;
     pub fn destroy_stt_engine(model: *mut SttEngine);
     pub fn stt(model: *mut SttEngine, data: FloatArray) -> *mut c_char;
     pub fn free_result(result: *mut c_char);

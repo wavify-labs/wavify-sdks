@@ -12,3 +12,6 @@ venv/
 
 # models
 *.safetensors
+
+# secrets
+.env

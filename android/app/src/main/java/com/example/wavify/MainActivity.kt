@@ -24,7 +24,8 @@ class MainActivity : AppCompatActivity() {
     private val wavifyASR: WavifyASR by lazy {WavifyASR(applicationContext)}
     private val modelPointer: Long by lazy {
         val modelPath = File(applicationContext.filesDir, "whisper-tiny-en.tflite").absolutePath
-        val modelPointer = wavifyASR.createModel(modelPath) // TODO: error handling
+        val apiKey = ""
+        val modelPointer = wavifyASR.createModel(modelPath, apiKey) // TODO: error handling
         Log.d(TAG, "Loaded model")
         modelPointer
     }
