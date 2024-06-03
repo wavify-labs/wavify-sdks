@@ -6,5 +6,6 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+anyhow = "1.0.86"
 env_logger = "0.10.0"
 wavify = { path = "../../rust/" } # todo: get from crates.io
