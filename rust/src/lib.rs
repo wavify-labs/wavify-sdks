@@ -6,7 +6,6 @@ use std::os::raw::c_char;
 extern crate log;
 use log::Level;
 
-#[repr(C)]
 pub struct SttEngine {
     inner: *mut SttEngineInner,
 }
