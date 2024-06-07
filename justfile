@@ -1,5 +1,6 @@
 link-libs core='/home/manuel/Projects/wavify-core':
 	#!/usr/bin/env bash
+	rm -rf libs/
 	set -euxo pipefail
 	echo {{core}}
 
@@ -40,3 +41,8 @@ link-libs core='/home/manuel/Projects/wavify-core':
 	ln -s "$AARCH64_PATH_WAVIFY" "${LIB_AARCH64}/libwavify_core.so"
 	ln -s "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/libwavify_core.so"
 	ln -s "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/wavify_core.dll"
+
+python-build:
+	rm -rf python/lib
+	cp -r lib/ python/lib
+	cd python && python -m build

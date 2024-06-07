@@ -34,8 +34,9 @@
         pythonDeps = p: with p; [
           # sdk
           wheel
-          setuptools
           twine
+          build
+          hatchling
           # demo
           pip
           # benchmark
