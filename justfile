@@ -53,3 +53,6 @@ python-lint:
 python-format:
 	isort --profile black .
 	black .
+
+python-write-documentation:
+	cd python/src/wavify && pydoc stt.SttEngine
