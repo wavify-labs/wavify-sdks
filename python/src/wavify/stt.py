@@ -41,7 +41,6 @@ class SttEngine:
         else:
             raise NotImplementedError
 
-        foo
         self.lib.create_stt_engine.argtypes = [c_char_p, c_char_p]
         self.lib.create_stt_engine.restype = POINTER(SttEngineInner)
 
