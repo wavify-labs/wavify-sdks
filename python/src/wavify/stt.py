@@ -25,7 +25,7 @@ def default_library_path() -> (Path, Path):
             platform_dir / "libwavify_core.so",
             platform_dir / "libtensorflowlite_c.so",
         )
-    elif platform.system() == "Windows" and platform.machine() == "x86_64":
+    elif platform.system() == "Windows" and platform.machine() in ["x86_64", "AMD64"]:
         platform_dir = base / "x86_64-pc-windows-gnu"
         return platform_dir / "wavify_core.dll", platform_dir / "tensorflowlite_c.dll"
     else:
