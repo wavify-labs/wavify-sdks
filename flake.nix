@@ -37,6 +37,8 @@
           twine
           build
           hatchling
+          black
+          isort
           # demo
           pip
           # benchmark
@@ -67,6 +69,7 @@
             nix-tree
             ffmpeg
             sox
+            ruff
             (python.withPackages pythonDeps)
             just
           ]);

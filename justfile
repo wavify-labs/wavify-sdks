@@ -46,3 +46,10 @@ python-build:
 	rm -rf python/lib
 	cp -r lib/ python/lib
 	cd python && python -m build
+
+python-lint:
+	ruff check .
+
+python-format:
+	isort --profile black .
+	black .
