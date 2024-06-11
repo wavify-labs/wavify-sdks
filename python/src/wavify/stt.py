@@ -36,8 +36,8 @@ class SttEngine:
     def __init__(self, model_path: str, api_key: str, lib_path=None):
         if lib_path is None:
             wavify_lib, tflite_lib = default_library_path()
-            ctypes.cdll.LoadLibrary(tflite_lib)
-            self.lib = ctypes.cdll.LoadLibrary(wavify_lib)
+            ctypes.cdll.LoadLibrary(str(tflite_lib))
+            self.lib = ctypes.cdll.LoadLibrary(str(wavify_lib))
         else:
             raise NotImplementedError
 
