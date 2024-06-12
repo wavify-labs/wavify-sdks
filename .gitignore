@@ -4,9 +4,6 @@ target/
 # nix
 .direnv/
 
-# android
-assets/
-
 # python
 venv/
 

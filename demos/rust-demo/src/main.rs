@@ -11,7 +11,7 @@ fn main() -> Result<()> {
     let api_key = env::var("WAVIFY_API_KEY")?;
 
     let (model_path, file_path) = if args.len() < 3 {
-        ("../../models/model-en.bin", "../../assets/samples_gb0.wav")
+        ("../../models/model-en.bin", "../../assets/samples_jfk.wav")
     } else {
         (&args[1] as &str, &args[2] as &str)
     };
