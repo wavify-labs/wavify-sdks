@@ -7,7 +7,7 @@ description = "Cross-platform and real-time speech AI including Speech-to-Text, 
 documentation = "https://www.wavify.dev/docs"
 homepage = "https://www.wavify.dev/"
 license-file = "LICENSE"
-keywords = ["Speech-to-Text", "stt", "asr", "machine-learning", "Wake word"]
+keywords = ["Speech-to-Text", "stt", "asr", "machine-learning", "wake-word"]
 categories = ["multimedia::audio"]
 
 include = [
