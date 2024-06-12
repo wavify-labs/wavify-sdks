@@ -43,9 +43,9 @@ libs-link core='/home/manuel/Projects/wavify-core':
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
 
 libs-bundle:
-	tar -czvf lib_bundled/aarch64-linux-android.tar.gz lib/aarch64-linux-android
-	tar -czvf lib_bundled/x86_64-pc-windows-gnu.tar.gz lib/x86_64-pc-windows-gnu
-	tar -czvf lib_bundled/x86_64-unknown-linux-gnu.tar.gz lib/x86_64-unknown-linux-gnu
+	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
+	tar -czvf x86_64-pc-windows-gnu.tar.gz lib/x86_64-pc-windows-gnu
+	tar -czvf x86_64-unknown-linux-gnu.tar.gz lib/x86_64-unknown-linux-gnu
 
 python-build:
 	rm -rf python/lib

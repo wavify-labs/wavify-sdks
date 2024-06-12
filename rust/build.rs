@@ -1,7 +1,9 @@
 use reqwest::blocking::get;
 use std::env;
 use std::fs;
+use std::io;
 use std::path::{Path, PathBuf};
+use tempfile::tempdir;
 
 fn main() {
     let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("lib/");
@@ -19,9 +21,12 @@ fn main() {
     let lib_out_dir = out_dir.join("lib/").join(lib_subdir);
 
     if !lib_dir.exists() {
-        download_and_extract_library(&lib_dir);
+        // we are limited by crates.io 10MB bundle size
+        // hence, we need to download dependencies at build time
+        download_and_extract_library(&lib_out_dir).unwrap();
+    } else {
+        copy_dir(lib_dir, &lib_out_dir).unwrap();
     }
-    copy_dir(lib_dir, &lib_out_dir).unwrap();
 
     let has_linked = link_library("wavify_core", &lib_out_dir);
     if !has_linked {
@@ -34,22 +39,28 @@ fn main() {
     }
 }
 
-fn download_and_extract_library(lib_dir: &Path) {
-    let base_url = "https://raw.githubusercontent.com/wavify-labs/wavify-sdks/main/lib_bundled/";
-    let filename = match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {
-        "linux" => "x86_64-unknown-linux-gnu.tar.gz",
-        "android" => "aarch64-linux-android.tar.gz",
-        "windows" => "x86_64-pc-windows-gnu.zip",
+fn download_and_extract_library(target: &Path) -> io::Result<()> {
+    let base_url = "https://nlkytncvwapfujviszuq.supabase.co/storage/v1/object/public/lib/";
+    let target_triplet = match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {
+        "linux" => "x86_64-unknown-linux-gnu",
+        "android" => "aarch64-linux-android",
+        "windows" => "x86_64-pc-windows-gnu",
         _ => todo!(),
     };
-    let url = base_url.to_owned() + filename;
+    let filename = target_triplet.to_owned() + ".tar.gz";
+    let url = base_url.to_owned() + &filename;
 
+    let temp_dir = tempdir()?;
     let mut response = get(url).unwrap();
-    let mut archive = vec![];
-    response.copy_to(&mut archive).unwrap();
+    let archive_path = temp_dir.path().join("archive");
+    let mut archive_file = fs::File::create(&archive_path)?;
+    response.copy_to(&mut archive_file).unwrap();
 
-    let mut ar = tar::Archive::new(flate2::read::GzDecoder::new(&archive[..]));
-    ar.unpack(lib_dir).unwrap();
+    let mut ar = tar::Archive::new(flate2::read::GzDecoder::new(fs::File::open(&archive_path)?));
+    ar.unpack(temp_dir.path())?;
+
+    let extracted_lib_dir = temp_dir.path().join("lib").join(target_triplet);
+    copy_dir(extracted_lib_dir, target)
 }
 
 fn link_library<T: std::fmt::Display>(name: T, search_path: &PathBuf) -> bool {
@@ -83,7 +94,7 @@ fn find_library<T: AsRef<Path>>(name: T, search_path: &PathBuf) -> Option<PathBu
     None
 }
 
-fn copy_dir<U: AsRef<Path>, V: AsRef<Path>>(from: U, to: V) -> Result<(), std::io::Error> {
+fn copy_dir<U: AsRef<Path>, V: AsRef<Path>>(from: U, to: V) -> Result<(), io::Error> {
     let mut stack = vec![PathBuf::from(from.as_ref())];
 
     let output_root = PathBuf::from(to.as_ref());
