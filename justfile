@@ -1,4 +1,4 @@
-link-libs core='/home/manuel/Projects/wavify-core':
+libs-link core='/home/manuel/Projects/wavify-core':
 	#!/usr/bin/env bash
 	rm -rf libs/
 	set -euxo pipefail
@@ -42,6 +42,11 @@ link-libs core='/home/manuel/Projects/wavify-core':
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
 
+libs-bundle:
+	tar -czvf lib_bundled/aarch64-linux-android.tar.gz lib/aarch64-linux-android
+	tar -czvf lib_bundled/x86_64-pc-windows-gnu.tar.gz lib/x86_64-pc-windows-gnu
+	tar -czvf lib_bundled/x86_64-unknown-linux-gnu.tar.gz lib/x86_64-unknown-linux-gnu
+
 python-build:
 	rm -rf python/lib
 	cp -r lib/ python/lib
@@ -56,3 +61,8 @@ python-format:
 
 python-write-documentation:
 	cd python/src/wavify && pydoc stt.SttEngine
+
+rust-build:
+	rm -rf rust/lib
+	cp -r lib/ rust/lib
+	cd rust && cargo clean && cargo build

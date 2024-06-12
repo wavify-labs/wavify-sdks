@@ -1,12 +1,10 @@
+use reqwest::blocking::get;
 use std::env;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 fn main() {
-    let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap())
-        .parent()
-        .unwrap()
-        .join("lib/");
+    let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("lib/");
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
@@ -19,6 +17,10 @@ fn main() {
 
     let lib_dir = dep_dir.join(lib_subdir);
     let lib_out_dir = out_dir.join("lib/").join(lib_subdir);
+
+    if !lib_dir.exists() {
+        download_and_extract_library(&lib_dir);
+    }
     copy_dir(lib_dir, &lib_out_dir).unwrap();
 
     let has_linked = link_library("wavify_core", &lib_out_dir);
@@ -30,6 +32,24 @@ fn main() {
     if !has_linked_tflitec {
         panic!("Linking tflitec failed")
     }
+}
+
+fn download_and_extract_library(lib_dir: &Path) {
+    let base_url = "https://raw.githubusercontent.com/wavify-labs/wavify-sdks/main/lib_bundled/";
+    let filename = match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {
+        "linux" => "x86_64-unknown-linux-gnu.tar.gz",
+        "android" => "aarch64-linux-android.tar.gz",
+        "windows" => "x86_64-pc-windows-gnu.zip",
+        _ => todo!(),
+    };
+    let url = base_url.to_owned() + filename;
+
+    let mut response = get(url).unwrap();
+    let mut archive = vec![];
+    response.copy_to(&mut archive).unwrap();
+
+    let mut ar = tar::Archive::new(flate2::read::GzDecoder::new(&archive[..]));
+    ar.unpack(lib_dir).unwrap();
 }
 
 fn link_library<T: std::fmt::Display>(name: T, search_path: &PathBuf) -> bool {
