@@ -1,10 +1,20 @@
 [package]
 name = "wavify"
-version = "0.1.0"
+version = "0.0.5"
+authors = ["Manuel Plank <manuel@wavify.dev>"]
 edition = "2021"
+description = "Cross-platform and real-time speech AI including Speech-to-Text, Speech-to-Intent and Wake words"
+documentation = "https://www.wavify.dev/docs"
+homepage = "https://www.wavify.dev/"
+license-file = "LICENSE"
+keywords = ["Speech-to-Text", "STT", "ASR", "machine-learning", "Wake word"]
+categories = ["multimedia::audio"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
+include = [
+    "**/*.rs",
+    "Cargo.toml",
+    "../lib/*"
+]
 [dependencies]
 hound = "3.5.0"
 libc = "0.2.147"
