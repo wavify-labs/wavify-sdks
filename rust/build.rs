@@ -19,7 +19,7 @@ fn main() {
 
     let lib_dir = dep_dir.join(lib_subdir);
     let lib_out_dir = out_dir.join("lib/").join(lib_subdir);
-    copy_dir(&lib_dir, &lib_out_dir).unwrap();
+    copy_dir(lib_dir, &lib_out_dir).unwrap();
 
     let has_linked = link_library("wavify_core", &lib_out_dir);
     if !has_linked {
@@ -38,7 +38,7 @@ fn link_library<T: std::fmt::Display>(name: T, search_path: &PathBuf) -> bool {
     } else {
         format!("lib{name}.so")
     };
-    if let Some(p) = find_library(&libname, search_path) {
+    if let Some(p) = find_library(libname, search_path) {
         println!("cargo:rustc-link-search={}", p.display());
         println!("cargo:rustc-link-lib={name}");
         return true;

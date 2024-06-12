@@ -1,5 +1,10 @@
 name: CI
 on: [push, pull_request]
+
+# Make sure CI fails on all warnings, including Clippy lints
+env:
+  RUSTFLAGS: "-Dwarnings"
+
 jobs:
   ruff:
     runs-on: ubuntu-latest
@@ -8,3 +13,9 @@ jobs:
       - uses: chartboost/ruff-action@v1
         with:
           args: 'check'
+  clippy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Clippy
+        run: cd rust && cargo clippy --all-targets --all-features

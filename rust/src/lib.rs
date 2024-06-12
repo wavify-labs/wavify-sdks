@@ -11,7 +11,10 @@ pub struct SttEngine {
 }
 
 #[repr(C)]
-struct SttEngineInner;
+struct SttEngineInner {
+    // C ABI does not allow zero-sized structs so we add a dummy field
+    _dummy: c_char,
+}
 
 #[repr(C)]
 pub struct FloatArray {
