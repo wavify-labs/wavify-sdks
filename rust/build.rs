@@ -21,8 +21,11 @@ fn main() {
     let lib_out_dir = out_dir.join("lib/").join(lib_subdir);
 
     if !lib_dir.exists() {
-        // we are limited by crates.io 10MB bundle size
+        // We are limited by crates.io 10MB bundle size
         // hence, we need to download dependencies at build time
+        // Note: This is not allowed on docs.rs builds
+        // TODO: Enable a mechanism to find dependencies via env vars
+        #[cfg(feature = "download-wavify-core")]
         download_and_extract_library(&lib_out_dir).unwrap();
     } else {
         copy_dir(lib_dir, &lib_out_dir).unwrap();
@@ -30,15 +33,16 @@ fn main() {
 
     let has_linked = link_library("wavify_core", &lib_out_dir);
     if !has_linked {
-        panic!("Linking dynamic library failed")
+        println!("cargo:warning=Linking wavify core failed")
     }
 
     let has_linked_tflitec = link_library("tensorflowlite_c", &lib_out_dir);
     if !has_linked_tflitec {
-        panic!("Linking tflitec failed")
+        panic!("cargo:warning=Linking tflitec failed")
     }
 }
 
+#[cfg(feature = "download-wavify-core")]
 fn download_and_extract_library(target: &Path) -> io::Result<()> {
     let base_url = "https://nlkytncvwapfujviszuq.supabase.co/storage/v1/object/public/lib/";
     let target_triplet = match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {

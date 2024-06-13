@@ -1,10 +1,10 @@
 [package]
 name = "wavify"
-version = "0.0.8"
+version = "0.0.9"
 authors = ["Manuel Plank <manuel@wavify.dev>"]
 edition = "2021"
 description = "Cross-platform and real-time speech AI including Speech-to-Text, Speech-to-Intent and Wake words"
-documentation = "https://www.wavify.dev/docs"
+documentation = "https://docs.rs/crate/wavify/latest"
 homepage = "https://www.wavify.dev/"
 license-file = "LICENSE"
 keywords = ["Speech-to-Text", "stt", "asr", "machine-learning", "wake-word"]
@@ -15,6 +15,14 @@ include = [
     "Cargo.toml",
     "lib/*"
 ]
+
+[features]
+default = [ "download-wavify-core" ]
+download-wavify-core = []
+
+[package.metadata.docs.rs]
+no-default-features = true
+
 [dependencies]
 hound = "3.5.0"
 libc = "0.2.147"
