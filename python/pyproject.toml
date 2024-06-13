@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wavify"
-version = "0.0.9"
+version = "0.0.10"
 authors = [
   { name="Manuel Plank", email="manuel@wavify.dev" },
 ]

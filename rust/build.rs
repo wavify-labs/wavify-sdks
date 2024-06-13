@@ -38,7 +38,7 @@ fn main() {
 
     let has_linked_tflitec = link_library("tensorflowlite_c", &lib_out_dir);
     if !has_linked_tflitec {
-        panic!("cargo:warning=Linking tflitec failed")
+        println!("cargo:warning=Linking tflitec failed")
     }
 }
 
