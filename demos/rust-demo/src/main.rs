@@ -8,8 +8,6 @@ use wavify::SttEngine;
 fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
 
-    let api_key = env::var("WAVIFY_API_KEY")?;
-
     let (model_path, file_path) = if args.len() < 3 {
         ("../../models/model-en.bin", "../../assets/samples_jfk.wav")
     } else {
@@ -18,7 +16,7 @@ fn main() -> Result<()> {
 
     env_logger::Builder::from_env(Env::default().default_filter_or("debug")).init();
 
-    let engine = SttEngine::new(model_path, &api_key)?;
+    let engine = SttEngine::new(model_path, &env::var("WAVIFY_API_KEY")?)?;
     let now = Instant::now();
     let result = engine.stt_from_file(file_path)?;
     println!("{:?}", result);

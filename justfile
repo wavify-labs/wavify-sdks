@@ -66,3 +66,6 @@ rust-build:
 	rm -rf rust/lib
 	cp -r lib/ rust/lib
 	cd rust && cargo clean && cargo build
+
+rust-write-documentation:
+	cd rust && cargo doc

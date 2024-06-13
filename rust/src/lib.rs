@@ -6,6 +6,7 @@ use std::os::raw::c_char;
 extern crate log;
 use log::Level;
 
+/// Represents the Speech-to-Text Engine.
 pub struct SttEngine {
     inner: *mut SttEngineInner,
 }
@@ -16,15 +17,21 @@ struct SttEngineInner {
     _dummy: c_char,
 }
 
+/// A struct representing an array of floating-point numbers.
 #[repr(C)]
 pub struct FloatArray {
+    /// Pointer to the array data.
     pub data: *const f32,
+    /// Length of the array.
     pub len: usize,
 }
 
+/// Represents possible errors that can occur during the speech-to-text process.
 #[derive(Debug)]
 pub enum WavifyError {
+    /// Error that occurs during initialization of the STT engine.
     InitError,
+    /// Error that occurs during inference.
     InferenceError,
 }
 
@@ -47,6 +54,22 @@ extern "C" {
 }
 
 impl SttEngine {
+    /// Creates a new instance of `SttEngine`.
+    ///
+    /// # Arguments
+    ///
+    /// * `model_path` - A string slice that holds the path to the model.
+    /// * `api_key` - A string slice that holds the API key.
+    ///
+    /// # Returns
+    ///
+    /// A result that, if successful, contains a new instance of `SttEngine`. Otherwise, it contains a `WavifyError`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let engine = SttEngine::new("path/to/model", "api_key");
+    /// ```
     pub fn new(model_path: &str, api_key: &str) -> Result<SttEngine, WavifyError> {
         let maybe_model_path_c = CString::new(model_path);
         let maybe_api_key_c = CString::new(api_key);
@@ -59,10 +82,26 @@ impl SttEngine {
         }
     }
 
+    /// Destroys the `SttEngine` instance, freeing any resources.
     pub fn destroy(self) {
         unsafe { destroy_stt_engine(self.inner) }
     }
 
+    /// Performs speech-to-text on the given audio data.
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - A slice of floating-point numbers representing the audio data.
+    ///
+    /// # Returns
+    ///
+    /// A result that, if successful, contains a `String` with the recognized text. Otherwise, it contains a `WavifyError`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let text = engine.stt(&audio_data).unwrap();
+    /// ```
     pub fn stt(&self, data: &[f32]) -> Result<String, WavifyError> {
         let float_array = FloatArray {
             data: data.as_ptr(),
@@ -81,6 +120,21 @@ impl SttEngine {
         }
     }
 
+    /// Performs speech-to-text on an audio file.
+    ///
+    /// # Arguments
+    ///
+    /// * `filename` - A string slice that holds the path to the audio file.
+    ///
+    /// # Returns
+    ///
+    /// A result that, if successful, contains a `String` with the recognized text. Otherwise, it contains a `WavifyError`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let text = engine.stt_from_file("path/to/audio.wav").unwrap();
+    /// ```
     pub fn stt_from_file(&self, filename: &str) -> Result<String, WavifyError> {
         let mut reader = WavReader::open(filename).unwrap();
 
