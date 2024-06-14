@@ -21,11 +21,15 @@ class MainActivity : AppCompatActivity() {
     private val resultText: TextView by lazy { findViewById(R.id.result_text) }
     private val statusText: TextView by lazy { findViewById(R.id.status_text) }
 
-    private val wavifyASR: WavifyASR by lazy {WavifyASR(applicationContext)}
+    private val engine: SttEngine by lazy {
+        SttEngine(
+            applicationContext
+        )
+    }
     private val modelPointer: Long by lazy {
-        val modelPath = File(applicationContext.filesDir, "whisper-tiny-en.tflite").absolutePath
-        val apiKey = ""
-        val modelPointer = wavifyASR.createModel(modelPath, apiKey) // TODO: error handling
+        val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
+        val apiKey = "a3ba66406dd1314b4eac9b8b872be3c7"
+        val modelPointer = engine.create(modelPath, apiKey)
         Log.d(TAG, "Loaded model")
         modelPointer
     }
@@ -34,12 +38,12 @@ class MainActivity : AppCompatActivity() {
 
     private val workerThreadExecutor = Executors.newSingleThreadExecutor()
 
-    init { // TODO: Whats first, the init or the attribute initialization from above?
+    init {
         try {
             System.loadLibrary("wavify_core")
             System.loadLibrary("tensorflowlite_c")
         } catch (err: Error) {
-            Log.e(TAG, "$err")
+            Log.e(TAG, "Error while loading lib $err")
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,11 +59,11 @@ class MainActivity : AppCompatActivity() {
 
             workerThreadExecutor.submit {
                 try {
-                    val audioFile = File(applicationContext.filesDir, "english.wav")
+                    val audioFile = File(applicationContext.filesDir, "en.wav")
                     val audioFloats = Audio.fromWavFile(audioFile)
 
                     val start = System.currentTimeMillis()
-                    val result = wavifyASR.process(audioFloats, modelPointer)
+                    val result = engine.stt(audioFloats, modelPointer)
                     val processTimeMs = System.currentTimeMillis() - start
                     setSuccessfulResult(result, processTimeMs)
                 } catch (e: Exception) {
@@ -95,7 +99,7 @@ class MainActivity : AppCompatActivity() {
 
                     val audioFloats = Audio.fromRecording(stopRecordingFlag)
                     val start = System.currentTimeMillis()
-                    val result = wavifyASR.process(audioFloats, modelPointer)
+                    val result = engine.stt(audioFloats, modelPointer)
                     val processTimeMs = System.currentTimeMillis() - start
                     setSuccessfulResult(result, processTimeMs)
                 } catch (e: Exception) {

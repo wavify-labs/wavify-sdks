@@ -90,6 +90,8 @@
             export LINUX_TFLITEC_PREBUILT_PATH="${pkgs.tensorflow-lite}/lib/libtensorflowlite_c.so"
             export ANDROID_TFLITEC_PREBUILT_PATH="${crossPkgs.tensorflow-lite}/lib/libtensorflowlite_c.so"
 
+            export ANDROID_OPENSSL_LIB_PATH="${crossPkgs.openssl.out}/lib"
+
           '';
         };
         packages = {
