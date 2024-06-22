@@ -1,7 +1,6 @@
 libs-link core='/home/manuel/Projects/wavify-core':
 	#!/usr/bin/env bash
-	rm -rf libs/
-	set -euxo pipefail
+	rm -rf lib/
 	echo {{core}}
 
 	LIB_AARCH64="lib/aarch64-linux-android"
@@ -46,6 +45,12 @@ libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
 	tar -czvf x86_64-pc-windows-gnu.tar.gz lib/x86_64-pc-windows-gnu
 	tar -czvf x86_64-unknown-linux-gnu.tar.gz lib/x86_64-unknown-linux-gnu
+
+libs-bundle-remove:
+	rm aarch64-linux-android.tar.gz 
+	rm x86_64-pc-windows-gnu.tar.gz
+	rm x86_64-unknown-linux-gnu.tar.gz
+	
 
 python-build:
 	rm -rf python/lib

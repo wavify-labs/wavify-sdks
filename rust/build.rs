@@ -6,7 +6,10 @@ use std::path::{Path, PathBuf};
 use tempfile::tempdir;
 
 fn main() {
-    let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap()).join("lib/");
+    let dep_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap())
+        .parent()
+        .unwrap()
+        .join("lib/");
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();

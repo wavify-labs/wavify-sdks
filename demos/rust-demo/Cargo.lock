@@ -1341,9 +1341,7 @@ checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
 
 [[package]]
 name = "wavify"
-version = "0.0.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f8b634384d0b814df6c6f0bd9996d06a2ffa79d471975cd2386ca3153a0542d"
+version = "0.0.10"
 dependencies = [
  "flate2",
  "hound",
