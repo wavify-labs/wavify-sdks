@@ -8,9 +8,10 @@ public class SttEngine {
         this.context = context;
     }
 
-    private static native long createFfi(final String modelPath, final String apiKey);
+    private static native long createFfi(final String modelPath, final String apiKey, final String appName);
     public long create(String modelPath, String apiKey) {
-        return createFfi(modelPath, apiKey);
+        String appName = context.getPackageName();
+        return createFfi(modelPath, apiKey, appName);
     }
 
     private static native long destroyFfi(final long model);

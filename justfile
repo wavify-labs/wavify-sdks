@@ -1,3 +1,5 @@
+set dotenv-load := true
+
 libs-link core='/home/manuel/Projects/wavify-core':
 	#!/usr/bin/env bash
 	rm -rf lib/
@@ -11,9 +13,9 @@ libs-link core='/home/manuel/Projects/wavify-core':
 	mkdir -p $LIB_WINDOWS
 
 	# Copy libtensorflowlite_c.so, accounting for the variable hash
-	AARCH64_PATH_TF=$(find {{core}}/target/aarch64-linux-android/release -name libtensorflowlite_c.so -print -quit)
-	X86_64_LINUX_PATH_TF=$(find {{core}}/target/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
-	WINDOWS_PATH_TF=$(find {{core}}/target/x86_64-pc-windows-gnu/release -name tensorflowlite_c.dll -print -quit)
+	AARCH64_PATH_TF=$(find {{core}}/target/build/aarch64-linux-android/aarch64-linux-android/release -name libtensorflowlite_c.so -print -quit)
+	X86_64_LINUX_PATH_TF=$(find {{core}}/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
+	WINDOWS_PATH_TF=$(find {{core}}/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release -name tensorflowlite_c.dll -print -quit)
 
 	if [ -n "$AARCH64_PATH_TF" ]; then
 	    cp "$AARCH64_PATH_TF" "${LIB_AARCH64}/"
@@ -33,9 +35,9 @@ libs-link core='/home/manuel/Projects/wavify-core':
 	    echo "tensorflowlite_c.dll not found for Windows."
 	fi
 
-	AARCH64_PATH_WAVIFY={{core}}/target/aarch64-linux-android/release/libwavify_core.so 
-	X86_64_LINUX_PATH_WAVIFY={{core}}/target/x86_64-unknown-linux-gnu/release/libwavify_core.so 
-	WINDOWS_PATH_WAVIFY={{core}}/target/x86_64-pc-windows-gnu/release/wavify_core.dll
+	AARCH64_PATH_WAVIFY={{core}}/target/build/aarch64-linux-android/aarch64-linux-android/release/libwavify_core.so 
+	X86_64_LINUX_PATH_WAVIFY={{core}}/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release/libwavify_core.so 
+	WINDOWS_PATH_WAVIFY={{core}}/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release/wavify_core.dll
 
 	cp "$AARCH64_PATH_WAVIFY" "${LIB_AARCH64}/"
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
@@ -50,7 +52,6 @@ libs-bundle-remove:
 	rm aarch64-linux-android.tar.gz 
 	rm x86_64-pc-windows-gnu.tar.gz
 	rm x86_64-unknown-linux-gnu.tar.gz
-	
 
 python-build:
 	rm -rf python/lib
@@ -71,6 +72,14 @@ rust-build:
 	rm -rf rust/lib
 	cp -r lib/ rust/lib
 	cd rust && cargo clean && cargo build
+
+rust-demo-run:
+	#!/usr/bin/env bash
+	set -euxo pipefail
+	cd demos/rust-demo
+	source .env 
+	export WAVIFY_API_KEY=$WAVIFY_API_KEY
+	cargo run
 
 rust-write-documentation:
 	cd rust && cargo doc

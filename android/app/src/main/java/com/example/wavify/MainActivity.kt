@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
     private val modelPointer: Long by lazy {
         val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
-        val apiKey = "a3ba66406dd1314b4eac9b8b872be3c7"
+        val apiKey = "d9f58ef5d8edb62618051d5cea490fa4" // TODO: remove
         val modelPointer = engine.create(modelPath, apiKey)
         Log.d(TAG, "Loaded model")
         modelPointer
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val TAG = "WAVIFY"
+        val TAG: String = MainActivity::class.java.name
         private const val RECORD_AUDIO_PERMISSION_REQUEST_CODE = 1
     }
 }
