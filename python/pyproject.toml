@@ -1,0 +1,32 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "wavify"
+version = "0.0.10"
+authors = [
+  { name="Manuel Plank", email="manuel@wavify.dev" },
+]
+description = "Wavify Python SDK"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = {file = "LICENSE"}
+keywords = ["Speech-to-Text", "STT", "Speech Recognition", "Voice Recognition", "ASR", "Automatic Speech Recognition", "Wake word"]
+
+[project.urls]
+Homepage = "https://wavify.dev"
+Issues = "https://github.com/wavify-labs/wavify-sdks/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/wavify"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"lib/x86_64-unknown-linux-gnu/libwavify_core.so" = "wavify/lib/x86_64-unknown-linux-gnu/libwavify_core.so"
+"lib/x86_64-unknown-linux-gnu/libtensorflowlite_c.so" = "wavify/lib/x86_64-unknown-linux-gnu/libtensorflowlite_c.so"
+"lib/x86_64-pc-windows-gnu/wavify_core.dll" = "wavify/lib/x86_64-pc-windows-gnu/wavify_core.dll"
+"lib/x86_64-pc-windows-gnu/tensorflowlite_c.dll" = "wavify/lib/x86_64-pc-windows-gnu/tensorflowlite_c.dll"

@@ -1,0 +1,14 @@
+# rust
+target/
+
+# nix
+.direnv/
+
+# python
+venv/
+
+# models
+*.safetensors
+
+# secrets
+.env
