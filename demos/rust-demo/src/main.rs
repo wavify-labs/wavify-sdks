@@ -21,6 +21,7 @@ fn main() -> Result<()> {
     let result = engine.stt_from_file(file_path)?;
     println!("{:?}", result);
     println!("{:?}", now.elapsed());
+
     engine.destroy();
 
     Ok(())
