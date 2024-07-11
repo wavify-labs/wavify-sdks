@@ -28,7 +28,6 @@
         pkgs = import nixpkgs {
           inherit system overlays;
         };
-        crossPkgs = import nixpkgs { system = "aarch64-linux"; };
         pythonPackages = pkgs.python310Packages;
         python = pythonPackages.python;
         pythonDeps = p: with p; [
@@ -63,7 +62,6 @@
             libclang
             cmake
             gfortran9
-            # openblas
             mold
             gcc
             nix-tree
@@ -75,24 +73,8 @@
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
           LD_LIBRARY_PATH = lib.makeLibraryPath [
-            pkgs.stdenv.cc.cc.lib # libstdc++.so.6
+            pkgs.stdenv.cc.cc.lib
           ];
-          shellHook = ''
-            export LIBCLANG_PATH="${pkgs.libclang.lib}/lib"
-            export ANDROID_HOME="${android-sdk}/share/android-sdk"
-            export ANDROID_SDK_ROOT="${android-sdk}/share/android-sdk"
-            export ANDROID_NDK_HOME="${android-sdk}/share/android-sdk/ndk-bundle"
-            export ANDROID_TOOLCHAIN_FILE="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake"
-            export CC="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang"
-            export CXX="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android21-clang++"
-            export JAVA_HOME="${jdk11.home}"
-
-            export LINUX_TFLITEC_PREBUILT_PATH="${pkgs.tensorflow-lite}/lib/libtensorflowlite_c.so"
-            export ANDROID_TFLITEC_PREBUILT_PATH="${crossPkgs.tensorflow-lite}/lib/libtensorflowlite_c.so"
-
-            export ANDROID_OPENSSL_LIB_PATH="${crossPkgs.openssl.out}/lib"
-
-          '';
         };
         packages = {
           android-sdk = android.sdk.${system} (sdkPkgs: with sdkPkgs; [
