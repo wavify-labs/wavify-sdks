@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
     private val modelPointer: Long by lazy {
         val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
-        val apiKey = "d9f58ef5d8edb62618051d5cea490fa4" // TODO: remove
+        val apiKey = "YourApiKey"
         val modelPointer = engine.create(modelPath, apiKey)
         Log.d(TAG, "Loaded model")
         modelPointer
