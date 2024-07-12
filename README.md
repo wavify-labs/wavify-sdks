@@ -1,4 +1,4 @@
-# wavify-sdks
+![The logo of Wavify.](assets/wavify-white-pink-word.svg?raw=true "Wavify logo")
 
 [![Documentation](https://img.shields.io/badge/documentation-grey)](https://www.wavify.dev/docs)
 ![Static Badge](https://img.shields.io/badge/platforms-Linux%20%7C%20Android%20%7C%20macOS%20%7C%20iOS%20%7C%20Windows-green)
@@ -7,6 +7,9 @@
 Wavify is a collection of small speech models and a runtime that kicks ass and runs anywhere.
 
 ## Benchmarks
+
+Running `assets/samples_jfk.wav` on a Raspberry Pi 4.
+
 |Engine   |Size   |Threads   |Time   |Real-time factor   |
 |---|---|---|---|---|
 | Whisper.cpp <br> (-O3 with NEON)   | 75MB <br> (Whisper tiny)  | 4  | 9.2s  | 0.84  |
@@ -17,7 +20,7 @@ Wavify is a collection of small speech models and a runtime that kicks ass and r
 Speech-to-text models for supported languages are available in `models/`. The filename specifies the language in which 
 the model operates, indicated by the ISO 639-1 code.
 
-You'll also need an API key which you can get from your [dashboard](https://www.wavify.dev/signin/password_signin) once signed in.
+You'll also need an API key which is available for free. You can get from your [dashboard](https://www.wavify.dev/signin/password_signin) once signed in.
 
 ### Python
 
