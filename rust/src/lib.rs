@@ -51,6 +51,7 @@ extern "C" {
     fn destroy_stt_engine(model: *mut SttEngineInner);
     fn stt(model: *mut SttEngineInner, data: FloatArray) -> *mut c_char;
     fn free_result(result: *mut c_char);
+    fn setup_logger();
 }
 
 impl SttEngine {
@@ -154,5 +155,27 @@ impl SttEngine {
         );
 
         self.stt(&data)
+    }
+}
+
+/// Sets up the logger using the underlying library.
+///
+/// # Examples
+///
+/// ```
+/// setup_logger_safe();
+/// ```
+///
+/// # Panics
+///
+/// This function does not panic.
+///
+/// # Errors
+///
+/// This function does not return any errors. Any errors during the logger setup
+/// must be handled internally by the core library.
+pub fn setup_logger_safe() {
+    unsafe {
+        setup_logger();
     }
 }
