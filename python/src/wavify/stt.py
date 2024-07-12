@@ -92,6 +92,9 @@ class SttEngine:
         self.lib.stt.argtypes = [POINTER(SttEngineInner), FloatArray]
         self.lib.stt.restype = c_char_p
 
+        self.lib.setup_logger.argtypes = []
+        self.lib.setup_logger.restype = None
+
         self.engine_inner = self.lib.create_stt_engine(
             model_path.encode("utf-8"), api_key.encode("utf-8")
         )
@@ -133,3 +136,14 @@ class SttEngine:
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
 
+    def setup_logger(self):
+        """
+        Set up the logger using the underlying core library.
+
+        Raises:
+            RuntimeError: If the logger setup fails.
+        """
+        try:
+            self.lib.setup_logger()
+        except Exception as e:
+            raise RuntimeError("Failed to set up logger") from e

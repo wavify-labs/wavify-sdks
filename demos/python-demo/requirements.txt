@@ -1,1 +1,1 @@
-wavify @ file:///home/manuel/Projects/wavify-sdks/python/dist/wavify-0.0.1-py3-none-any.whl
+wavify @ file:///home/manuel/Projects/wavify-sdks/python/dist/wavify-0.0.10-py3-none-any.whl
