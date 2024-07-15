@@ -6,6 +6,7 @@
 
 Wavify is a collection of small speech models and a runtime that kicks ass and runs anywhere.
 
+
 ## Benchmarks
 
 Running `assets/samples_jfk.wav` on a Raspberry Pi 4.
@@ -64,11 +65,19 @@ Coming soon.
 
 ## Compatibility
 
+### Platforms and architectures
+
 - `aarch64-apple-ios`
 - `aarch64-linux-android`
 - `x86_64-apple-darwin`
 - `x86_64-pc-windows-gnu`
 - `x86_64-unknown-linux-gnu`
+
+### Bindings
+
+Wavify comes with support for Python, Java and Rust.
+Additional foreign language bindings can be developed externally and we welcome contributions to list them here. 
+Function signature are available in `lib/wavify_core.h`.
 
 ## Contributing
 
