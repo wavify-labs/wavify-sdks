@@ -1,6 +1,6 @@
 set dotenv-load := true
 
-libs-link core='/home/david/Projects/wavify-core':
+libs-link core='/home/manuel/Projects/wavify-core':
 	#!/usr/bin/env bash
 
 	rm -rf lib/
