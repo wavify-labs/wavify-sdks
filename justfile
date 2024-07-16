@@ -1,20 +1,28 @@
 set dotenv-load := true
 
-libs-link core='/home/manuel/Projects/wavify-core':
+libs-link:
 	#!/usr/bin/env bash
-	echo {{core}}
+
+	if [ -z $WAVIFY_CORE_SOURCE_PATH ]; then
+		echo "The location of the of the wavify-core source is not set."
+		exit 1
+	fi
+
+	rm -rf lib/
+	rm -rf python/lib/
 
 	LIB_AARCH64="lib/aarch64-linux-android"
 	LIB_LINUX="lib/x86_64-unknown-linux-gnu"
 	LIB_WINDOWS="lib/x86_64-pc-windows-gnu"
+
 	mkdir -p $LIB_AARCH64
 	mkdir -p $LIB_LINUX
 	mkdir -p $LIB_WINDOWS
 
 	# Copy libtensorflowlite_c.so, accounting for the variable hash
-	AARCH64_PATH_TF=$(find {{core}}/target/build/aarch64-linux-android/aarch64-linux-android/release -name libtensorflowlite_c.so -print -quit)
-	X86_64_LINUX_PATH_TF=$(find {{core}}/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
-	WINDOWS_PATH_TF=$(find {{core}}/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release -name tensorflowlite_c.dll -print -quit)
+	AARCH64_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-linux-android/aarch64-linux-android/release -name libtensorflowlite_c.so -print -quit)
+	X86_64_LINUX_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
+	WINDOWS_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release -name tensorflowlite_c.dll -print -quit)
 
 	if [ -n "$AARCH64_PATH_TF" ]; then
 	    cp "$AARCH64_PATH_TF" "${LIB_AARCH64}/"
@@ -34,13 +42,14 @@ libs-link core='/home/manuel/Projects/wavify-core':
 	    echo "tensorflowlite_c.dll not found for Windows."
 	fi
 
-	AARCH64_PATH_WAVIFY={{core}}/target/build/aarch64-linux-android/aarch64-linux-android/release/libwavify_core.so 
-	X86_64_LINUX_PATH_WAVIFY={{core}}/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release/libwavify_core.so 
-	WINDOWS_PATH_WAVIFY={{core}}/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release/wavify_core.dll
+	AARCH64_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-linux-android/aarch64-linux-android/release/libwavify_core.so 
+	X86_64_LINUX_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release/libwavify_core.so 
+	WINDOWS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release/wavify_core.dll
 
 	cp "$AARCH64_PATH_WAVIFY" "${LIB_AARCH64}/"
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
+	cp -r "lib/" python/
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
