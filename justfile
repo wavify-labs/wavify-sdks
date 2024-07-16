@@ -1,6 +1,6 @@
 set dotenv-load := true
 
-libs-link core='/home/manuel/Projects/wavify-core':
+libs-link core='<path to wavify-core':
 	#!/usr/bin/env bash
 
 	rm -rf lib/
@@ -28,21 +28,21 @@ libs-link core='/home/manuel/Projects/wavify-core':
 
 	if [ -n "$AARCH64_PATH_TF" ]; then
 	    cp "$AARCH64_PATH_TF" "${LIB_AARCH64}/"
-		cp "$AARCH64_PATH_TF" "${LIB_AARCH64_PYTHON_SDK}/"
+			cp "$AARCH64_PATH_TF" "${LIB_AARCH64_PYTHON_SDK}/"
 	else
 	    echo "libtensorflowlite_c.so not found for aarch64."
 	fi
 
 	if [ -n "$X86_64_LINUX_PATH_TF" ]; then
 	    cp "$X86_64_LINUX_PATH_TF" "${LIB_LINUX}/"
-		cp "$X86_64_LINUX_PATH_TF" "${LIB_LINUX_PYTHON_SDK}/"
+			cp "$X86_64_LINUX_PATH_TF" "${LIB_LINUX_PYTHON_SDK}/"
 	else
 	    echo "libtensorflowlite_c.so not found for x86_64."
 	fi
 
 	if [ -n "$WINDOWS_PATH_TF" ]; then
 	    cp "$WINDOWS_PATH_TF" "${LIB_WINDOWS}/"
-		cp "$WINDOWS_PATH_TF" "${LIB_WINDOWS_PYTHON_SDK}/"
+			cp "$WINDOWS_PATH_TF" "${LIB_WINDOWS_PYTHON_SDK}/"
 	else
 	    echo "tensorflowlite_c.dll not found for Windows."
 	fi
