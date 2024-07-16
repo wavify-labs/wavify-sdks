@@ -1,4 +1,4 @@
-package com.example.wavify
+package com.example.wavify_demo
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
+import dev.wavify.SttEngine
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
             workerThreadExecutor.submit {
                 try {
-                    val audioFile = File(applicationContext.filesDir, "en.wav")
+                    val audioFile = File(applicationContext.filesDir, "samples_jfk.wav")
                     val audioFloats = Audio.fromWavFile(audioFile)
 
                     val start = System.currentTimeMillis()

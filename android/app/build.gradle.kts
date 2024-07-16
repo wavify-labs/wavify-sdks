@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.wavify"
+    namespace = "com.example.wavify_demo"
     compileSdk = 33
 
     val ndkDir = System.getenv("ANDROID_NDK_HOME") ?: ""
 
     defaultConfig {
-        applicationId = "com.example.wavify"
+        applicationId = "com.example.wavify_demo"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("dev.wavify:wavify:0.0.10")
 
     testImplementation("junit:junit:4.13.2")
 

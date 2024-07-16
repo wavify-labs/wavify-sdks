@@ -1,4 +1,4 @@
-package com.example.wavify;
+package com.example.wavify_demo;
 
 import android.content.Context;
 
