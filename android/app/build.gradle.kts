@@ -64,7 +64,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("dev.wavify:wavify:0.0.10")
+    implementation(project(":wavify"))
 
     testImplementation("junit:junit:4.13.2")
 

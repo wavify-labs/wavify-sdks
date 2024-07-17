@@ -22,31 +22,18 @@ class MainActivity : AppCompatActivity() {
     private val resultText: TextView by lazy { findViewById(R.id.result_text) }
     private val statusText: TextView by lazy { findViewById(R.id.status_text) }
 
+
     private val engine: SttEngine by lazy {
-        SttEngine(
-            applicationContext
-        )
-    }
-    private val modelPointer: Long by lazy {
         val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
         val apiKey = "YourApiKey"
-        val modelPointer = engine.create(modelPath, apiKey)
-        Log.d(TAG, "Loaded model")
-        modelPointer
+        val appName = "com.example.wavify_demo"
+        SttEngine.create(modelPath, apiKey, appName)
     }
 
     private val stopRecordingFlag = AtomicBoolean(false)
 
     private val workerThreadExecutor = Executors.newSingleThreadExecutor()
 
-    init {
-        try {
-            System.loadLibrary("wavify_core")
-            System.loadLibrary("tensorflowlite_c")
-        } catch (err: Error) {
-            Log.e(TAG, "Error while loading lib $err")
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
@@ -64,7 +51,7 @@ class MainActivity : AppCompatActivity() {
                     val audioFloats = Audio.fromWavFile(audioFile)
 
                     val start = System.currentTimeMillis()
-                    val result = engine.stt(audioFloats, modelPointer)
+                    val result = engine.stt(audioFloats)
                     val processTimeMs = System.currentTimeMillis() - start
                     setSuccessfulResult(result, processTimeMs)
                 } catch (e: Exception) {
@@ -100,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
                     val audioFloats = Audio.fromRecording(stopRecordingFlag)
                     val start = System.currentTimeMillis()
-                    val result = engine.stt(audioFloats, modelPointer)
+                    val result = engine.stt(audioFloats)
                     val processTimeMs = System.currentTimeMillis() - start
                     setSuccessfulResult(result, processTimeMs)
                 } catch (e: Exception) {

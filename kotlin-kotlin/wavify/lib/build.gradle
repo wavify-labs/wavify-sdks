@@ -1,0 +1,94 @@
+plugins {
+    // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
+    id 'org.jetbrains.kotlin.jvm' version '1.8.10'
+
+    // Apply the java-library plugin for API and implementation separation.
+    id 'java-library'
+
+    id 'maven-publish'
+
+    id 'com.android.library'
+
+}
+
+version = '0.0.10'
+group = 'dev.wavify'
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            groupId = 'dev.wavify'
+            artifactId = 'wavify'
+            version = '0.0.10'
+
+            pom {
+                name = 'Wavify'
+                description = 'On-device Speech-to-Text Engine'
+                url = 'https://wavify.dev/'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'manuel030'
+                        name = 'Manuel Plank'
+                        email = 'manuel@wavify.dev'
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            url = uri("file://${buildDir}/repo")
+        }
+    }
+}
+
+tasks.named('test') {
+    // Use JUnit Platform for unit tests.
+    useJUnitPlatform()
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs "src/main/resources"
+        }
+    }
+}
+
+tasks.named('processResources') {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.WARN
+}
+tasks.named('jar') {
+    manifest {
+        attributes(
+            'Implementation-Title': project.name,
+            'Implementation-Version': project.version,
+        )
+    }
+}

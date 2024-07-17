@@ -3,9 +3,6 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
-        mavenLocal() {
-            url = uri("file://${rootDir}/../kotlin/wavify/lib/build/repo")
-        }
     }
 }
 dependencyResolutionManagement {
@@ -13,11 +10,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        mavenLocal {
-            url = uri("file://${rootDir}/../kotlin/wavify/lib/build/repo")
-        }
     }
 }
 
 rootProject.name = "Wavify"
 include(":app")
+include(":wavify")
