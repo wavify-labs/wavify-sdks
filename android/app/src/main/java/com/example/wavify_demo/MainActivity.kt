@@ -25,11 +25,10 @@ class MainActivity : AppCompatActivity() {
 
     private val engine: SttEngine by lazy {
         val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
-        val apiKey = BuildConfig.WAVIFY_AP_KEY
-        val appName = applicationContext.packageName
-        val engine = SttEngine.create(modelPath, apiKey, appName)
-        engine.setupLogger()
-        engine
+        val apiKey = "5338799bc636036ac1d6feb47428d279"
+        val modelPointer = engine.create(modelPath, apiKey)
+        Log.d(TAG, "Loaded model")
+        modelPointer
     }
 
     private val stopRecordingFlag = AtomicBoolean(false)
