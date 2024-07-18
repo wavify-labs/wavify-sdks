@@ -135,6 +135,24 @@ class SttEngine:
         data = list(struct.unpack(f"<{n}h", wavedata))
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
+    
+def set_log_level(level: str):
+        """
+        Set the logging level.
+        Available values are: trace, debug, info, warn, error.
+
+        Args:
+            level (str): The logging level.
+        """
+
+        wavify_lib, tflite_lib = default_library_path()
+        ctypes.cdll.LoadLibrary(str(tflite_lib))
+        lib = ctypes.cdll.LoadLibrary(str(wavify_lib))
+
+        lib.setup_logger.argtypes = [c_char_p]
+
+        lib.setup_logger(level.encode("utf-8"))
+
 
     def setup_logger(self):
         """

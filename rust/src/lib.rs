@@ -51,7 +51,7 @@ extern "C" {
     fn destroy_stt_engine(model: *mut SttEngineInner);
     fn stt(model: *mut SttEngineInner, data: FloatArray) -> *mut c_char;
     fn free_result(result: *mut c_char);
-    fn setup_logger();
+    fn setup_logger(level: *const c_char);
 }
 
 impl SttEngine {
@@ -163,7 +163,7 @@ impl SttEngine {
 /// # Examples
 ///
 /// ```
-/// setup_logger_safe();
+/// set_log_level(level: &str);
 /// ```
 ///
 /// # Panics
@@ -174,8 +174,12 @@ impl SttEngine {
 ///
 /// This function does not return any errors. Any errors during the logger setup
 /// must be handled internally by the core library.
-pub fn setup_logger_safe() {
+/// 
+
+pub fn set_log_level(level: &str) {
+
+    let c_level = CString::new(level).expect("Log level conversion failed");
     unsafe {
-        setup_logger();
+        setup_logger(c_level.as_ptr());
     }
 }
