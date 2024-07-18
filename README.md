@@ -59,6 +59,18 @@ fn main() -> Result<()> {
 
 Kotlin bindings and an example app showcasing the integration of Wavify is available in `android/`.
 
+```kotlin
+import dev.wavify.SttEngine
+
+val modelPath = File(applicationContext.filesDir, "/your/model").absolutePath
+val apiKey = BuildConfig.WAVIFY_AP_KEY
+val appName = applicationContext.packageName
+val engine = SttEngine.create(modelPath, apiKey, appName) 
+
+val audioFloats = floatArrayOf(0.0f, 0.1f, 0.2f) // Replace with actual audio data
+val result = engine.stt(audioFloats)
+```
+
 ### iOS
 
 Coming soon.

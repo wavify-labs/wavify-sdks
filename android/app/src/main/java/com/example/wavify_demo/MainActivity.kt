@@ -2,7 +2,6 @@ package com.example.wavify_demo
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     private val engine: SttEngine by lazy {
         val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
         val apiKey = BuildConfig.WAVIFY_AP_KEY
-        val appName = "com.example.wavify_demo"
+        val appName = applicationContext.packageName
         val engine = SttEngine.create(modelPath, apiKey, appName)
         engine.setupLogger()
         engine
