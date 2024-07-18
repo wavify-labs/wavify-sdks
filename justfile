@@ -8,6 +8,7 @@ libs-link:
 		exit 1
 	fi
 
+	cp lib/wavify_core.h .
 	rm -rf lib/
 	rm -rf python/lib/
 
@@ -50,6 +51,7 @@ libs-link:
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
 	cp -r "lib/" python/
+	mv wavify_core.h lib/wavify_core.h
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android

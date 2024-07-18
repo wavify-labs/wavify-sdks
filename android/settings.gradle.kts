@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Wavify"
 include(":app")
+include(":wavify")

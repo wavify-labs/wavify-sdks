@@ -56,7 +56,8 @@
       {
         devShells.default = mkShell {
           packages = (with pkgs; [
-            rustToolchain
+            # tools
+            just
             openssl
             pkg-config
             libclang
@@ -67,9 +68,15 @@
             nix-tree
             ffmpeg
             sox
+            # rust
+            rustToolchain
+            # python
             ruff
             (python.withPackages pythonDeps)
-            just
+            # kotlin
+            gradle
+            jdk
+            gnupg
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
           LD_LIBRARY_PATH = lib.makeLibraryPath [

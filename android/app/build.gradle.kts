@@ -1,16 +1,18 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
 
 android {
-    namespace = "com.example.wavify"
+    namespace = "com.example.wavify_demo"
     compileSdk = 33
 
     val ndkDir = System.getenv("ANDROID_NDK_HOME") ?: ""
 
     defaultConfig {
-        applicationId = "com.example.wavify"
+        applicationId = "com.example.wavify_demo"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -27,12 +29,21 @@ android {
 
 
     buildTypes {
+        // Read secret from local.properties file
+        // This is not recommended for production environments. Read the Android Security Guidelines
+        val apiKey: String = gradleLocalProperties(rootDir).getProperty("WAVIFY_API_KEY")
         release {
+            android.buildFeatures.buildConfig = true
+            buildConfigField("String", "WAVIFY_AP_KEY", apiKey)
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            android.buildFeatures.buildConfig = true
+            buildConfigField("String", "WAVIFY_AP_KEY", apiKey)
         }
     }
     compileOptions {
@@ -64,6 +75,7 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.google.android.material:material:1.8.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation(project(":wavify"))
 
     testImplementation("junit:junit:4.13.2")
 
