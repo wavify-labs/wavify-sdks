@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -27,12 +29,21 @@ android {
 
 
     buildTypes {
+        // Read secret from local.properties file
+        // This is not recommended for production environments. Read the Android Security Guidelines
+        val apiKey: String = gradleLocalProperties(rootDir).getProperty("WAVIFY_API_KEY")
         release {
+            android.buildFeatures.buildConfig = true
+            buildConfigField("String", "WAVIFY_AP_KEY", apiKey)
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        debug {
+            android.buildFeatures.buildConfig = true
+            buildConfigField("String", "WAVIFY_AP_KEY", apiKey)
         }
     }
     compileOptions {

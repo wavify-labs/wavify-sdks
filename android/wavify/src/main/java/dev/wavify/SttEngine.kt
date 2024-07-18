@@ -15,7 +15,10 @@ class SttEngine private constructor(private val nativeHandle: Long) {
         external fun destroyFfi(engineHandle: Long)
 
         @JvmStatic
-        external fun sttFfi(engineHandle: Long, data: FloatArray): String
+        external fun sttFfi(data: FloatArray, engineHandle: Long): String
+
+        @JvmStatic
+        external fun setupLoggerFfi()
 
         fun create(modelPath: String, apiKey: String, appName: String): SttEngine {
 
@@ -34,7 +37,11 @@ class SttEngine private constructor(private val nativeHandle: Long) {
     }
 
     fun stt(data: FloatArray): String {
-        return sttFfi(nativeHandle, data)
+        return sttFfi(data, nativeHandle)
+    }
+
+    fun setupLogger() {
+        setupLoggerFfi()
     }
 
 }

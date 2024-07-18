@@ -57,7 +57,7 @@ fn main() -> Result<()> {
 
 ### Android
 
-An example app showcasing the integration of Wavify is available in `android/`.
+Kotlin bindings and an example app showcasing the integration of Wavify is available in `android/`.
 
 ### iOS
 
@@ -75,7 +75,7 @@ Coming soon.
 
 ### Bindings
 
-Wavify comes with support for Python, Java and Rust.
+Wavify comes with support for Python, Kotlin and Rust.
 Additional foreign language bindings can be developed externally and we welcome contributions to list them here. 
 Function signature are available in `lib/wavify_core.h`.
 
