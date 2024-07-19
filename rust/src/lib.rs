@@ -46,6 +46,26 @@ impl std::fmt::Display for WavifyError {
 
 impl std::error::Error for WavifyError {}
 
+#[derive(Debug)]
+pub enum LogLevel {
+    Trace,
+    Debug,
+    Info,
+    Warn,
+    Error,
+}
+impl LogLevel {
+    fn as_str(&self) -> &str {
+        match self {
+            LogLevel::Trace => "trace",
+            LogLevel::Debug => "debug",
+            LogLevel::Info => "info",
+            LogLevel::Warn => "warn",
+            LogLevel::Error => "error",
+        }
+    }
+}
+
 extern "C" {
     fn create_stt_engine(model_path: *const c_char, api_key: *const c_char) -> *mut SttEngineInner;
     fn destroy_stt_engine(model: *mut SttEngineInner);
@@ -158,12 +178,21 @@ impl SttEngine {
     }
 }
 
+
 /// Sets up the logger using the underlying library.
+///
+/// Available values are: `LogLevel::Trace`, `LogLevel::Debug`, `LogLevel::Info`, `LogLevel::Warn`, `LogLevel::Error`.
+/// If `None` is provided, the log level is set to `LogLevel::Info`.
+///
+/// # Arguments
+///
+/// * `level` - The logging level. This can be `Some(LogLevel)` or `None`.
 ///
 /// # Examples
 ///
 /// ```
-/// set_log_level(level: &str);
+/// set_log_level(Some(LogLevel::Debug)); // Sets log level to Debug
+/// set_log_level(None); // Sets log level to default (Info)
 /// ```
 ///
 /// # Panics
@@ -172,13 +201,13 @@ impl SttEngine {
 ///
 /// # Errors
 ///
-/// This function does not return any errors. Any errors during the logger setup
-/// must be handled internally by the core library.
-/// 
+/// This function returns a `Result<(), NulError>` indicating whether the log level conversion to a C-compatible string succeeded or failed.
 
-pub fn set_log_level(level: &str) {
-
-    let c_level = CString::new(level).expect("Log level conversion failed");
+pub fn set_log_level(level: Option<LogLevel>) {
+    let default_level = LogLevel::Info;
+    let level = level.unwrap_or(default_level);
+    let level_str = level.as_str();
+    let c_level = CString::new(level_str).expect("Log level conversion failed");
     unsafe {
         setup_logger(c_level.as_ptr());
     }
