@@ -9,21 +9,27 @@ libs-link:
 	fi
 
 	cp lib/wavify_core.h .
+	cp -rf lib/WavifyCore.xcframework .
 	rm -rf lib/
 	rm -rf python/lib/
 
 	LIB_AARCH64="lib/aarch64-linux-android"
 	LIB_LINUX="lib/x86_64-unknown-linux-gnu"
 	LIB_WINDOWS="lib/x86_64-pc-windows-gnu"
+	LIB_MACOS="lib/aarch64-apple-darwin"
+	LIB_IOS="lib/aarch64-apple-ios"
 
 	mkdir -p $LIB_AARCH64
 	mkdir -p $LIB_LINUX
 	mkdir -p $LIB_WINDOWS
+	mkdir -p $LIB_MACOS
+	mkdir -p $LIB_IOS
 
 	# Copy libtensorflowlite_c.so, accounting for the variable hash
 	AARCH64_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-linux-android/aarch64-linux-android/release -name libtensorflowlite_c.so -print -quit)
 	X86_64_LINUX_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
 	WINDOWS_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release -name tensorflowlite_c.dll -print -quit)
+	MAC_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-darwin/aarch64-apple-darwin/release -name libtensorflowlite_c.so -print -quit)
 
 	if [ -n "$AARCH64_PATH_TF" ]; then
 	    cp "$AARCH64_PATH_TF" "${LIB_AARCH64}/"
@@ -43,15 +49,26 @@ libs-link:
 	    echo "tensorflowlite_c.dll not found for Windows."
 	fi
 
+	if [ -n "$MAC_PATH_TF" ]; then
+	    cp "$MAC_PATH_TF" "${LIB_MACOS}/"
+	else
+	    echo "libtensorflowlite_c.so not found for MacOS."
+	fi
+
 	AARCH64_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-linux-android/aarch64-linux-android/release/libwavify_core.so 
 	X86_64_LINUX_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release/libwavify_core.so 
 	WINDOWS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release/wavify_core.dll
+	MACOS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-darwin/aarch64-apple-darwin/release/libwavify_core.dylib
+	IOS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-ios/aarch64-apple-ios/release/libwavify_core.a
 
 	cp "$AARCH64_PATH_WAVIFY" "${LIB_AARCH64}/"
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
+	cp "$MACOS_PATH_WAVIFY" "${LIB_MACOS}/"
+	cp "$IOS_PATH_WAVIFY" "${LIB_IOS}/"
 	cp -r "lib/" python/
 	mv wavify_core.h lib/wavify_core.h
+	cp -r $WAVIFY_CORE_SOURCE_PATH/WavifyCore.xcframework lib/
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
@@ -62,6 +79,16 @@ libs-bundle-remove:
 	rm aarch64-linux-android.tar.gz 
 	rm x86_64-pc-windows-gnu.tar.gz
 	rm x86_64-unknown-linux-gnu.tar.gz
+
+ios-framework-link:
+	#!/usr/bin/env bash
+
+	if [ -z $WAVIFY_CORE_SOURCE_PATH ]; then
+		echo "The location of the of the wavify-core source is not set."
+		exit 1
+	fi
+	rm -rf lib/WavifyCore.xcframework
+	cp -r $WAVIFY_CORE_SOURCE_PATH/WavifyCore.xcframework lib/
 
 python-build:
 	rm -rf python/lib
