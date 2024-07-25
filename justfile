@@ -51,10 +51,7 @@ libs-link:
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
 	cp -r "lib/" python/
-<<<<<<< HEAD
 	mv wavify_core.h lib/wavify_core.h
-=======
->>>>>>> f86a01f (feat: set log level in python and rust sdk)
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
