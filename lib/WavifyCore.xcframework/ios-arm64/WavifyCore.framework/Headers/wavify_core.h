@@ -4,18 +4,6 @@
 #include <ostream>
 #include <new>
 
-constexpr static const uintptr_t SAMPLE_RATE = 16000;
-
-constexpr static const uintptr_t N_FFT = 400;
-
-constexpr static const uintptr_t HOP_LENGTH = 160;
-
-constexpr static const uintptr_t CHUNK_LENGTH = 30;
-
-constexpr static const uintptr_t N_SAMPLES = (CHUNK_LENGTH * SAMPLE_RATE);
-
-constexpr static const uintptr_t N_FRAMES = (N_SAMPLES / HOP_LENGTH);
-
 struct SttEngine;
 
 struct FloatArray {

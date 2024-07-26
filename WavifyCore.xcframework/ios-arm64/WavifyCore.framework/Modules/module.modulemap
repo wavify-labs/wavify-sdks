@@ -1,6 +1,0 @@
-framework module WavifyCore{
-  umbrella header "WavifyCore.h"
-
-  export *
-  module * { export * }
-}

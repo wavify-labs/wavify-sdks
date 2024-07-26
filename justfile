@@ -68,7 +68,7 @@ libs-link:
 	cp "$IOS_PATH_WAVIFY" "${LIB_IOS}/"
 	cp -r "lib/" python/
 	mv wavify_core.h lib/wavify_core.h
-	cp -r $WAVIFY_CORE_SOURCE_PATH/WavifyCore.xcframework lib/
+	mv WavifyCore.xcframework lib/
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
