@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import dev.wavify.LogLevel
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         val apiKey = BuildConfig.WAVIFY_AP_KEY
         val appName = applicationContext.packageName
         val engine = SttEngine.create(modelPath, apiKey, appName)
-        engine.setupLogger()
+        engine.setLogLevel(LogLevel.INFO)
         engine
     }
 

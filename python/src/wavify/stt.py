@@ -3,12 +3,20 @@ Wavify's speech-to-text engine.
 """
 
 import ctypes
+from enum import Enum
 import platform
 import struct
+from typing import Union
 import wave
 from ctypes import POINTER, c_char_p, c_float, c_uint64
 from pathlib import Path
 
+class LogLevel(Enum):
+    TRACE = "trace"
+    DEBUG = "debug"
+    INFO = "info"
+    WARN = "warn"
+    ERROR = "error"
 
 class FloatArray(ctypes.Structure):
     """
@@ -36,7 +44,8 @@ def default_library_path() -> (Path, Path):
     Determine the default library paths based on the current platform and architecture.
 
     Returns:
-        tuple: A tuple containing the paths to the Wavify core and TensorFlow Lite libraries.
+        tuple: A tuple containing the paths to the Wavify core and
+        TensorFlow Lite libraries.
 
     Raises:
         NotImplementedError: If the platform or architecture is not supported.
@@ -61,7 +70,8 @@ class SttEngine:
 
     Attributes:
         lib (CDLL): The loaded wavify core library.
-        engine_inner (POINTER(SttEngineInner)): A pointer to the inner STT engine structure.
+        engine_inner (POINTER(SttEngineInner)): A pointer to
+            the inner STT engine structure.
     """
 
     def __init__(self, model_path: str, api_key: str, lib_path=None):
@@ -71,7 +81,8 @@ class SttEngine:
         Args:
             model_path (str): The path to the model file.
             api_key (str): The API key for authentication.
-            lib_path (Path, optional): The path to the library. If None, default paths will be used.
+                lib_path (Path, optional): The path to the library.
+                If None, default paths will be used.
 
         Raises:
             NotImplementedError: If the provided library path is not supported.
@@ -136,14 +147,36 @@ class SttEngine:
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
 
-    def setup_logger(self):
+def set_log_level(level: Union[LogLevel, None]):
         """
-        Set up the logger using the underlying core library.
+        Set the logging level.
+        Available values are: LogLevel.TRACE, LogLevel.DEBUG,
+        LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR.
+        If None provided, log level is set to LogLevel.INFO
 
-        Raises:
-            RuntimeError: If the logger setup fails.
+        Args:
+            level (Union[LogLevel, None]): The logging level.
         """
-        try:
-            self.lib.setup_logger()
-        except Exception as e:
-            raise RuntimeError("Failed to set up logger") from e
+
+        wavify_lib, tflite_lib = default_library_path()
+        ctypes.cdll.LoadLibrary(str(tflite_lib))
+        lib = ctypes.cdll.LoadLibrary(str(wavify_lib))
+
+        lib.setup_logger.argtypes = [c_char_p]
+        default_level = LogLevel.INFO
+        if level is None:
+            level = default_level
+        elif isinstance(level, str):
+            # If level is a LogLevel.value, convert it to LogLevel enum if possible
+            try:
+                level_enum = LogLevel[level.upper()]
+            # if regular string was provided raise error
+            except KeyError:
+                raise ValueError("Invalid type for level. " +
+                                 "Must be a LogLevel or LogLevel.value")
+            lib.setup_logger(level_enum.value.encode("utf-8"))
+        elif isinstance(level, LogLevel):
+            lib.setup_logger(level.value.encode("utf-8"))
+        else:
+            raise ValueError("Invalid type for level. " +
+                             "Must be a LogLevel or LogLevel.value")
