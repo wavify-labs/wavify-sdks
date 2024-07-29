@@ -1,5 +1,6 @@
 set dotenv-load := true
 
+# Internal command for the Wavify core development team
 libs-link:
 	#!/usr/bin/env bash
 
@@ -10,6 +11,7 @@ libs-link:
 
 	cp lib/wavify_core.h .
 	cp -rf lib/WavifyCore.xcframework .
+	cp -rf lib/TensorFlowLiteC.framework .
 	rm -rf lib/
 	rm -rf python/lib/
 
@@ -60,15 +62,19 @@ libs-link:
 	WINDOWS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release/wavify_core.dll
 	MACOS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-darwin/aarch64-apple-darwin/release/libwavify_core.dylib
 	IOS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-ios/aarch64-apple-ios/release/libwavify_core.a
+	IOS_SIM_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/libwavify_core_fat.a
 
 	cp "$AARCH64_PATH_WAVIFY" "${LIB_AARCH64}/"
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
 	cp "$MACOS_PATH_WAVIFY" "${LIB_MACOS}/"
 	cp "$IOS_PATH_WAVIFY" "${LIB_IOS}/"
+	cp "$IOS_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64-simulator/WavifyCore.framework/WavifyCore
+	cp "$IOS_SIM_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64_x86_64-simulator/WavifyCore.framework/WavifyCore
 	cp -r "lib/" python/
 	mv wavify_core.h lib/wavify_core.h
 	mv WavifyCore.xcframework lib/
+	mv TensorFlowLiteC.framework lib/
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android

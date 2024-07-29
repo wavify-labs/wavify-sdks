@@ -11,7 +11,10 @@
 		2629DCBC2C4FD91E00097146 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2629DCBB2C4FD91E00097146 /* ContentView.swift */; };
 		2629DCBE2C4FD92000097146 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2629DCBD2C4FD92000097146 /* Assets.xcassets */; };
 		2629DCC12C4FD92000097146 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2629DCC02C4FD92000097146 /* Preview Assets.xcassets */; };
-		2629DCC92C4FE00000097146 /* WavifyCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2629DCC82C4FE00000097146 /* WavifyCore.xcframework */; };
+		26A2F8D02C57D7D200136E8E /* TensorFlowLiteC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DBB7BF2C57CDB8007ED19A /* TensorFlowLiteC.framework */; };
+		26A2F8D42C57D98300136E8E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 26A2F8D32C57D98300136E8E /* libc++.tbd */; };
+		26A491BE2C53E7960077F30D /* WavifyLib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A491BD2C53E7960077F30D /* WavifyLib.swift */; };
+		26DBB7BC2C57A94F007ED19A /* WavifyCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26674B3E2C53ED4900D045C5 /* WavifyCore.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,7 +23,10 @@
 		2629DCBB2C4FD91E00097146 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		2629DCBD2C4FD92000097146 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2629DCC02C4FD92000097146 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		2629DCC82C4FE00000097146 /* WavifyCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WavifyCore.xcframework; path = ../lib/WavifyCore.xcframework; sourceTree = "<group>"; };
+		26674B3E2C53ED4900D045C5 /* WavifyCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WavifyCore.xcframework; path = ../lib/WavifyCore.xcframework; sourceTree = "<group>"; };
+		26A2F8D32C57D98300136E8E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
+		26A491BD2C53E7960077F30D /* WavifyLib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavifyLib.swift; sourceTree = "<group>"; };
+		26DBB7BF2C57CDB8007ED19A /* TensorFlowLiteC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TensorFlowLiteC.framework; path = ../lib/TensorFlowLiteC.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -28,7 +34,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2629DCC92C4FE00000097146 /* WavifyCore.xcframework in Frameworks */,
+				26A2F8D42C57D98300136E8E /* libc++.tbd in Frameworks */,
+				26A2F8D02C57D7D200136E8E /* TensorFlowLiteC.framework in Frameworks */,
+				26DBB7BC2C57A94F007ED19A /* WavifyCore.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,7 +83,9 @@
 		2629DCC72C4FDFFF00097146 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2629DCC82C4FE00000097146 /* WavifyCore.xcframework */,
+				26A2F8D32C57D98300136E8E /* libc++.tbd */,
+				26DBB7BF2C57CDB8007ED19A /* TensorFlowLiteC.framework */,
+				26674B3E2C53ED4900D045C5 /* WavifyCore.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -83,6 +93,7 @@
 		2629DCCC2C4FE03900097146 /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				26A491BD2C53E7960077F30D /* WavifyLib.swift */,
 			);
 			path = Lib;
 			sourceTree = "<group>";
@@ -158,6 +169,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2629DCBC2C4FD91E00097146 /* ContentView.swift in Sources */,
+				26A491BE2C53E7960077F30D /* WavifyLib.swift in Sources */,
 				2629DCBA2C4FD91E00097146 /* WavifyApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -289,11 +301,17 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wavify/Preview Content\"";
 				DEVELOPMENT_TEAM = 9SU97KHQT8;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_ARCHS = "";
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = (
+					"/Users/wavify/Projects/wavify-sdks/**",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -319,11 +337,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Wavify/Preview Content\"";
 				DEVELOPMENT_TEAM = 9SU97KHQT8;
 				ENABLE_PREVIEWS = YES;
+				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
