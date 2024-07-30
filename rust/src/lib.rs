@@ -200,10 +200,17 @@ impl SttEngine {
 ///
 /// # Errors
 ///
-/// This function returns a `Result<(), NulError>` indicating whether the log level conversion to a C-compatible string succeeded or failed.
+/// This function prints an error message if it fails to create a C-compatible string for the log level. 
+
 pub fn set_log_level(level: Option<LogLevel>) {
     let level_str = level.as_ref().unwrap_or(&LogLevel::Info).as_str();
-    let c_level = CString::new(level_str).expect("Log level conversion failed");
+    let c_level = match CString::new(level_str) {
+        Ok(lev) => lev,
+        Err(e) => {
+            eprintln!("Failed to create CString for logging: {:?}", e);
+            return;
+        }
+    };
     unsafe {
         setup_logger(c_level.as_ptr());
     }
