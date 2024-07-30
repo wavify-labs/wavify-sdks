@@ -2,10 +2,10 @@ import os
 from time import time
 from pathlib import Path
 
-from wavify.stt import SttEngine, set_log_level, LogLevel
+from wavify.stt import SttEngine, LogLevel
 
-set_log_level(LogLevel.DEBUG)
 engine = SttEngine("../../models/model-en.bin", os.getenv("WAVIFY_API_KEY"))
+engine.set_log_level(LogLevel.DEBUG)
 
 now = time()
 result_file = engine.stt_from_file(
