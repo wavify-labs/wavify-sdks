@@ -31,7 +31,7 @@ struct ContentView: View {
     @State private var readyToRecord: Bool = true
 
     private func recordAndRecognize() {
-      audioRecorder.record { recordResult in
+      audioRecorder.startRecording { recordResult in
         let recognizeResult = recordResult.flatMap { recordingBufferAndData in
             let modelResult = engine.recognizeSpeech(from: convertDataToFloatArray(data: recordingBufferAndData.data))
             switch modelResult {
@@ -61,19 +61,31 @@ struct ContentView: View {
 
     var body: some View {
       VStack {
+        Image("Logo")
+              .resizable()
+              .aspectRatio(contentMode: .fit)
+              .frame(width: 150, height: 150)
+          
         Text("Press \"Record\", say something, and get recognized!")
-          .padding()
+              .padding()
 
         Button("Record") {
-          readyToRecord = false
-          recordAndRecognize()
-        }
-        .padding()
-        .disabled(!readyToRecord)
+            readyToRecord = false
+            recordAndRecognize()
+            }
+            .padding()
+            .disabled(!readyToRecord)
+          
+        Button("Stop") {
+            readyToRecord = true
+            audioRecorder.stopRecording()
+            }
+            .padding()
+            .disabled(readyToRecord)
 
         Text("\(message)")
-          .foregroundColor(successful ? .none : .red)
-          .padding()
+              .foregroundColor(successful ? .none : .red)
+              .padding()
       }
     }
 }

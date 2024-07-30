@@ -9,7 +9,6 @@ import AVFoundation
 import Foundation
 
 private let kSampleRate: Int = 16000
-private let kRecordingDuration: TimeInterval = 10
 
 class AudioRecorder {
   typealias RecordingBufferAndData = (buffer: AVAudioBuffer, data: Data)
@@ -20,7 +19,10 @@ class AudioRecorder {
     case Error(message: String)
   }
 
-  func record(callback: @escaping RecordingDoneCallback) {
+  private var recorderDelegate: RecorderDelegate?
+  private var recorder: AVAudioRecorder?
+
+  func startRecording(callback: @escaping RecordingDoneCallback) {
     let session = AVAudioSession.sharedInstance()
     session.requestRecordPermission { allowed in
       do {
@@ -32,7 +34,6 @@ class AudioRecorder {
         try session.setActive(true)
 
         let tempDir = FileManager.default.temporaryDirectory
-
         let recordingUrl = tempDir.appendingPathComponent("recording.wav")
 
         let formatSettings: [String: Any] = [
@@ -52,19 +53,19 @@ class AudioRecorder {
         recorder.delegate = delegate
         self.recorderDelegate = delegate
 
-        guard recorder.record(forDuration: kRecordingDuration) else {
-          throw AudioRecorderError.Error(message: "Failed to record.")
+        guard recorder.record() else {
+          throw AudioRecorderError.Error(message: "Failed to start recording.")
         }
 
-        // control should resume in recorder.delegate.audioRecorderDidFinishRecording()
       } catch {
         callback(.failure(error))
       }
     }
   }
 
-  private var recorderDelegate: RecorderDelegate?
-  private var recorder: AVAudioRecorder?
+  func stopRecording() {
+    recorder?.stop()
+  }
 
   private class RecorderDelegate: NSObject, AVAudioRecorderDelegate {
     private let callback: RecordingDoneCallback
