@@ -69,11 +69,11 @@ libs-link:
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
 	cp "$MACOS_PATH_WAVIFY" "${LIB_MACOS}/"
 	cp "$IOS_PATH_WAVIFY" "${LIB_IOS}/"
-	cp "$IOS_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64-simulator/WavifyCore.framework/WavifyCore
+	mv WavifyCore.xcframework lib/
+	cp "$IOS_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64/WavifyCore.framework/WavifyCore
 	cp "$IOS_SIM_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64_x86_64-simulator/WavifyCore.framework/WavifyCore
 	cp -r "lib/" python/
 	mv wavify_core.h lib/wavify_core.h
-	mv WavifyCore.xcframework lib/
 	mv TensorFlowLiteC.framework lib/
 
 libs-bundle:

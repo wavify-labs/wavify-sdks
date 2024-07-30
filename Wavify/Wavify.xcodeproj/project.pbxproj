@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		261F1C742C58DE4900284971 /* AudioRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 261F1C732C58DE4900284971 /* AudioRecorder.swift */; };
 		2629DCBA2C4FD91E00097146 /* WavifyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2629DCB92C4FD91E00097146 /* WavifyApp.swift */; };
 		2629DCBC2C4FD91E00097146 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2629DCBB2C4FD91E00097146 /* ContentView.swift */; };
 		2629DCBE2C4FD92000097146 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2629DCBD2C4FD92000097146 /* Assets.xcassets */; };
@@ -14,10 +15,12 @@
 		26A2F8D02C57D7D200136E8E /* TensorFlowLiteC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26DBB7BF2C57CDB8007ED19A /* TensorFlowLiteC.framework */; };
 		26A2F8D42C57D98300136E8E /* libc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 26A2F8D32C57D98300136E8E /* libc++.tbd */; };
 		26A491BE2C53E7960077F30D /* WavifyLib.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A491BD2C53E7960077F30D /* WavifyLib.swift */; };
+		26AB60932C5918F000603A7C /* model-en.bin in Resources */ = {isa = PBXBuildFile; fileRef = 26AB60922C5918F000603A7C /* model-en.bin */; };
 		26DBB7BC2C57A94F007ED19A /* WavifyCore.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 26674B3E2C53ED4900D045C5 /* WavifyCore.xcframework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		261F1C732C58DE4900284971 /* AudioRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioRecorder.swift; sourceTree = "<group>"; };
 		2629DCB62C4FD91E00097146 /* Wavify.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wavify.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2629DCB92C4FD91E00097146 /* WavifyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavifyApp.swift; sourceTree = "<group>"; };
 		2629DCBB2C4FD91E00097146 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -26,6 +29,8 @@
 		26674B3E2C53ED4900D045C5 /* WavifyCore.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WavifyCore.xcframework; path = ../lib/WavifyCore.xcframework; sourceTree = "<group>"; };
 		26A2F8D32C57D98300136E8E /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		26A491BD2C53E7960077F30D /* WavifyLib.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WavifyLib.swift; sourceTree = "<group>"; };
+		26AB60922C5918F000603A7C /* model-en.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; path = "model-en.bin"; sourceTree = "<group>"; };
+		26AB60942C591B0700603A7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		26DBB7BF2C57CDB8007ED19A /* TensorFlowLiteC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = TensorFlowLiteC.framework; path = ../lib/TensorFlowLiteC.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,7 +69,10 @@
 		2629DCB82C4FD91E00097146 /* Wavify */ = {
 			isa = PBXGroup;
 			children = (
+				26AB60942C591B0700603A7C /* Info.plist */,
 				2629DCB92C4FD91E00097146 /* WavifyApp.swift */,
+				261F1C732C58DE4900284971 /* AudioRecorder.swift */,
+				26AB60922C5918F000603A7C /* model-en.bin */,
 				2629DCBB2C4FD91E00097146 /* ContentView.swift */,
 				2629DCBD2C4FD92000097146 /* Assets.xcassets */,
 				2629DCBF2C4FD92000097146 /* Preview Content */,
@@ -157,6 +165,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2629DCC12C4FD92000097146 /* Preview Assets.xcassets in Resources */,
+				26AB60932C5918F000603A7C /* model-en.bin in Resources */,
 				2629DCBE2C4FD92000097146 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -170,6 +179,7 @@
 			files = (
 				2629DCBC2C4FD91E00097146 /* ContentView.swift in Sources */,
 				26A491BE2C53E7960077F30D /* WavifyLib.swift in Sources */,
+				261F1C742C58DE4900284971 /* AudioRecorder.swift in Sources */,
 				2629DCBA2C4FD91E00097146 /* WavifyApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -313,6 +323,8 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Wavify/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow audio recording for the speech recognition.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -345,6 +357,8 @@
 				ENABLE_PREVIEWS = YES;
 				EXCLUDED_ARCHS = "";
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Wavify/Info.plist;
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Allow audio recording for the speech recognition.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

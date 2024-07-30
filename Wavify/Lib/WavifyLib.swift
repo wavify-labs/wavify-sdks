@@ -9,7 +9,7 @@ import Foundation
 import WavifyCore
 
 
-// Define a class to manage the SttEngine
+
 class SttEngine {
     private var engine: OpaquePointer?
 
@@ -36,4 +36,17 @@ class SttEngine {
     static func setupLogger() {
         setup_logger()
     }
+}
+
+func convertDataToFloatArray(data: Data) -> FloatArray {
+    let floatSize = MemoryLayout<Float>.size
+    let count = data.count / floatSize
+
+    // Allocate memory for the float array
+    let floatPointer = data.withUnsafeBytes { (rawBufferPointer) -> UnsafePointer<Float> in
+        let rawPointer = rawBufferPointer.baseAddress!.assumingMemoryBound(to: Float.self)
+        return UnsafePointer(rawPointer)
+    }
+
+    return FloatArray(data: floatPointer, len: UInt(count))
 }
