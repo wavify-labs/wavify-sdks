@@ -202,9 +202,7 @@ impl SttEngine {
 ///
 /// This function returns a `Result<(), NulError>` indicating whether the log level conversion to a C-compatible string succeeded or failed.
 pub fn set_log_level(level: Option<LogLevel>) {
-    let default_level = LogLevel::Info;
-    let level = level.unwrap_or(default_level);
-    let level_str = level.as_str();
+    let level_str = level.as_ref().unwrap_or(&LogLevel::Info).as_str();
     let c_level = CString::new(level_str).expect("Log level conversion failed");
     unsafe {
         setup_logger(c_level.as_ptr());
