@@ -12,6 +12,8 @@ import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import dev.wavify.SttEngine
+import dev.wavify.Logger
+import dev.wavify.LogLevel
 
 
 class MainActivity : AppCompatActivity() {
@@ -27,8 +29,8 @@ class MainActivity : AppCompatActivity() {
         val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
         val apiKey = BuildConfig.WAVIFY_AP_KEY
         val appName = applicationContext.packageName
+        Logger.setLogLevel(LogLevel.DEBUG)
         val engine = SttEngine.create(modelPath, apiKey, appName)
-        engine.setupLogger()
         engine
     }
 

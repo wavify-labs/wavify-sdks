@@ -2,6 +2,27 @@ package dev.wavify
 
 import android.util.Log
 
+enum class LogLevel(val level: String) {
+    TRACE("trace"),
+    DEBUG("debug"),
+    INFO("info"),
+    WARN("warn"),
+    ERROR("error")
+}
+
+object Logger {
+    init {
+        System.loadLibrary("wavify_core")
+    }
+
+    @JvmStatic
+    private external fun setupLoggerFfi(logLevel: String)
+
+    fun setLogLevel(logLevel: LogLevel = LogLevel.INFO) {
+        setupLoggerFfi(logLevel.level)
+    }
+}
+
 class SttEngine private constructor(private val nativeHandle: Long) {
 
     companion object {
@@ -16,9 +37,6 @@ class SttEngine private constructor(private val nativeHandle: Long) {
 
         @JvmStatic
         external fun sttFfi(data: FloatArray, engineHandle: Long): String
-
-        @JvmStatic
-        external fun setupLoggerFfi()
 
         fun create(modelPath: String, apiKey: String, appName: String): SttEngine {
 
@@ -39,9 +57,6 @@ class SttEngine private constructor(private val nativeHandle: Long) {
     fun stt(data: FloatArray): String {
         return sttFfi(data, nativeHandle)
     }
-
-    fun setupLogger() {
-        setupLoggerFfi()
-    }
-
 }
+
+
