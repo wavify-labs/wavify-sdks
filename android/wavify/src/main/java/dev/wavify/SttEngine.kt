@@ -10,6 +10,19 @@ enum class LogLevel(val level: String) {
     ERROR("error")
 }
 
+object Logger {
+    init {
+        System.loadLibrary("wavify_core")
+        System.loadLibrary("tensorflowlite_c")
+    }
+
+    @JvmStatic
+    private external fun setupLoggerFfi(logLevel: String)
+
+    fun setLogLevel(logLevel: LogLevel = LogLevel.INFO) {
+        setupLoggerFfi(logLevel.level)
+    }
+}
 
 class SttEngine private constructor(private val nativeHandle: Long) {
 
@@ -25,9 +38,6 @@ class SttEngine private constructor(private val nativeHandle: Long) {
 
         @JvmStatic
         external fun sttFfi(data: FloatArray, engineHandle: Long): String
-
-        @JvmStatic
-        external fun setupLoggerFfi(logLevel: String)
 
         fun create(modelPath: String, apiKey: String, appName: String): SttEngine {
 
@@ -48,11 +58,6 @@ class SttEngine private constructor(private val nativeHandle: Long) {
     fun stt(data: FloatArray): String {
         return sttFfi(data, nativeHandle)
     }
-
-    fun setLogLevel(logLevel: LogLevel = LogLevel.INFO) {
-        setupLoggerFfi(logLevel.level)
-    }
-
 }
 
 
