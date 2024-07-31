@@ -72,9 +72,10 @@ libs-link:
 	mv WavifyCore.xcframework lib/
 	cp "$IOS_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64/WavifyCore.framework/WavifyCore
 	cp "$IOS_SIM_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64_x86_64-simulator/WavifyCore.framework/WavifyCore
-	cp -r "lib/" python/
 	mv wavify_core.h lib/wavify_core.h
 	mv TensorFlowLiteC.framework lib/
+	mkdir python/lib
+	cp -r lib/aarch64-* python/lib && cp -r lib/x86_64-* python/lib
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
