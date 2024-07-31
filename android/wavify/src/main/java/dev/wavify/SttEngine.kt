@@ -50,7 +50,7 @@ class SttEngine private constructor(private val nativeHandle: Long) {
     }
 
     fun setLogLevel(logLevel: LogLevel = LogLevel.INFO) {
-        setupLoggerFfi(logLevel.toString())
+        setupLoggerFfi(logLevel.level)
     }
 
 }
