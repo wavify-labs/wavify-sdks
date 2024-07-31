@@ -147,7 +147,7 @@ class SttEngine:
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
 
-    def set_log_level(self, level: Union[LogLevel, None]):
+    def set_log_level(self, level: Union[LogLevel, None]=LogLevel.INFO):
             """
             Set the logging level.
             Available values are: LogLevel.TRACE, LogLevel.DEBUG,
@@ -158,10 +158,7 @@ class SttEngine:
                 level (Union[LogLevel, None]): The logging level.
             """
 
-            default_level = LogLevel.INFO
-            if level is None:
-                level = default_level
-            elif isinstance(level, str):
+            if isinstance(level, str):
                 # If level is a LogLevel.value, convert it to LogLevel enum if possible
                 try:
                     level_enum = LogLevel[level.upper()]

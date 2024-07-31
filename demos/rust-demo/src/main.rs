@@ -3,7 +3,7 @@ use env_logger::Env;
 use std::env;
 use std::time::Instant;
 
-use wavify::{set_log_level, SttEngine, LogLevel};
+use wavify::{set_log_level, LogLevel, SttEngine};
 
 fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
@@ -14,7 +14,8 @@ fn main() -> Result<()> {
         (&args[1] as &str, &args[2] as &str)
     };
 
-    set_log_level(Some(LogLevel::Info));
+    // set_log_level(Some(LogLevel::Info));
+    set_log_level();
     env_logger::Builder::from_env(Env::default().default_filter_or("debug")).init();
 
     let engine = SttEngine::new(model_path, &env::var("WAVIFY_API_KEY")?)?;
