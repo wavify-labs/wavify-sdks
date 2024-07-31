@@ -13,7 +13,6 @@ enum class LogLevel(val level: String) {
 object Logger {
     init {
         System.loadLibrary("wavify_core")
-        System.loadLibrary("tensorflowlite_c")
     }
 
     @JvmStatic

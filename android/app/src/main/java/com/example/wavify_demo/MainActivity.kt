@@ -8,12 +8,12 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import dev.wavify.LogLevel
 import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
 import dev.wavify.SttEngine
 import dev.wavify.Logger
+import dev.wavify.LogLevel
 
 
 class MainActivity : AppCompatActivity() {

@@ -67,6 +67,7 @@ def default_library_path() -> (Path, Path):
     else:
         return NotImplementedError
 
+
 def load_lib() -> CDLL:
     wavify_lib, tflite_lib = default_library_path()
     ctypes.cdll.LoadLibrary(str(tflite_lib))
@@ -154,6 +155,7 @@ class SttEngine:
         data = list(struct.unpack(f"<{n}h", wavedata))
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
+
 
 def set_log_level(level: Union[LogLevel, None] = LogLevel.INFO):
     """
