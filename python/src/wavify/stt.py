@@ -11,12 +11,14 @@ import wave
 from ctypes import POINTER, c_char_p, c_float, c_uint64
 from pathlib import Path
 
+
 class LogLevel(Enum):
     TRACE = "trace"
     DEBUG = "debug"
     INFO = "info"
     WARN = "warn"
     ERROR = "error"
+
 
 class FloatArray(ctypes.Structure):
     """
@@ -26,6 +28,7 @@ class FloatArray(ctypes.Structure):
         data (POINTER(c_float)): A pointer to the float data.
         len (c_uint64): The length of the float array.
     """
+
     _fields_ = [
         ("data", POINTER(c_float)),
         ("len", c_uint64),
@@ -36,6 +39,7 @@ class SttEngineInner(ctypes.Structure):
     """
     A placeholder class for the inner structure of the STT engine.
     """
+
     pass
 
 
@@ -147,28 +151,30 @@ class SttEngine:
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
 
-    def set_log_level(self, level: Union[LogLevel, None]=LogLevel.INFO):
-            """
-            Set the logging level.
-            Available values are: LogLevel.TRACE, LogLevel.DEBUG,
-            LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR.
-            If None provided, log level is set to LogLevel.INFO
+    def set_log_level(self, level: Union[LogLevel, None] = LogLevel.INFO):
+        """
+        Set the logging level.
+        Available values are: LogLevel.TRACE, LogLevel.DEBUG,
+        LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR.
+        If None provided, log level is set to LogLevel.INFO
 
-            Args:
-                level (Union[LogLevel, None]): The logging level.
-            """
+        Args:
+            level (Union[LogLevel, None]): The logging level.
+        """
 
-            if isinstance(level, str):
-                # If level is a LogLevel.value, convert it to LogLevel enum if possible
-                try:
-                    level_enum = LogLevel[level.upper()]
-                # if regular string was provided raise error
-                except KeyError:
-                    raise ValueError("Invalid type for level. " +
-                                    "Must be a LogLevel or LogLevel.value")
-                self.lib.setup_logger(level_enum.value.encode("utf-8"))
-            elif isinstance(level, LogLevel):
-                self.lib.setup_logger(level.value.encode("utf-8"))
-            else:
-                raise ValueError("Invalid type for level. " +
-                                "Must be a LogLevel or LogLevel.value")
+        if isinstance(level, str):
+            # If level is a LogLevel.value, convert it to LogLevel enum if possible
+            try:
+                level_enum = LogLevel[level.upper()]
+            # if regular string was provided raise error
+            except KeyError:
+                raise ValueError(
+                    "Invalid type for level. " + "Must be a LogLevel or LogLevel.value"
+                )
+            self.lib.setup_logger(level_enum.value.encode("utf-8"))
+        elif isinstance(level, LogLevel):
+            self.lib.setup_logger(level.value.encode("utf-8"))
+        else:
+            raise ValueError(
+                "Invalid type for level. " + "Must be a LogLevel or LogLevel.value"
+            )
