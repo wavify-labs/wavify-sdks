@@ -8,7 +8,7 @@ import platform
 import struct
 from typing import Union
 import wave
-from ctypes import POINTER, c_char_p, c_float, c_uint64
+from ctypes import CDLL, POINTER, c_char_p, c_float, c_uint64
 from pathlib import Path
 
 
@@ -67,6 +67,12 @@ def default_library_path() -> (Path, Path):
     else:
         return NotImplementedError
 
+def load_lib() -> CDLL:
+    wavify_lib, tflite_lib = default_library_path()
+    ctypes.cdll.LoadLibrary(str(tflite_lib))
+    lib = ctypes.cdll.LoadLibrary(str(wavify_lib))
+    return lib
+
 
 class SttEngine:
     """
@@ -92,9 +98,7 @@ class SttEngine:
             NotImplementedError: If the provided library path is not supported.
         """
         if lib_path is None:
-            wavify_lib, tflite_lib = default_library_path()
-            ctypes.cdll.LoadLibrary(str(tflite_lib))
-            self.lib = ctypes.cdll.LoadLibrary(str(wavify_lib))
+            self.lib = load_lib()
         else:
             raise NotImplementedError
 
@@ -151,30 +155,30 @@ class SttEngine:
         float_data = [sample / 32767 for sample in data]  # TODO: maybe use numpy here
         return self.stt(float_data)
 
-    def set_log_level(self, level: Union[LogLevel, None] = LogLevel.INFO):
-        """
-        Set the logging level.
-        Available values are: LogLevel.TRACE, LogLevel.DEBUG,
-        LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR.
-        If None provided, log level is set to LogLevel.INFO
+def set_log_level(level: Union[LogLevel, None] = LogLevel.INFO):
+    """
+    Set the logging level.
+    Available values are: LogLevel.TRACE, LogLevel.DEBUG,
+    LogLevel.INFO, LogLevel.WARN, LogLevel.ERROR.
+    If None provided, log level is set to LogLevel.INFO
 
-        Args:
-            level (Union[LogLevel, None]): The logging level.
-        """
-
-        if isinstance(level, str):
-            # If level is a LogLevel.value, convert it to LogLevel enum if possible
-            try:
-                level_enum = LogLevel[level.upper()]
-            # if regular string was provided raise error
-            except KeyError:
-                raise ValueError(
-                    "Invalid type for level. " + "Must be a LogLevel or LogLevel.value"
-                )
-            self.lib.setup_logger(level_enum.value.encode("utf-8"))
-        elif isinstance(level, LogLevel):
-            self.lib.setup_logger(level.value.encode("utf-8"))
-        else:
+    Args:
+        level (Union[LogLevel, None]): The logging level.
+    """
+    lib = load_lib()
+    if isinstance(level, str):
+        # If level is a LogLevel.value, convert it to LogLevel enum if possible
+        try:
+            level_enum = LogLevel[level.upper()]
+        # if regular string was provided raise error
+        except KeyError:
             raise ValueError(
                 "Invalid type for level. " + "Must be a LogLevel or LogLevel.value"
             )
+        lib.setup_logger(level_enum.value.encode("utf-8"))
+    elif isinstance(level, LogLevel):
+        lib.setup_logger(level.value.encode("utf-8"))
+    else:
+        raise ValueError(
+            "Invalid type for level. " + "Must be a LogLevel or LogLevel.value"
+        )
