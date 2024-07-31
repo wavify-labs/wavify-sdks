@@ -14,8 +14,7 @@ fn main() -> Result<()> {
         (&args[1] as &str, &args[2] as &str)
     };
 
-    // set_log_level(Some(LogLevel::Info));
-    set_log_level();
+    set_log_level(Some(LogLevel::Debug));
     env_logger::Builder::from_env(Env::default().default_filter_or("debug")).init();
 
     let engine = SttEngine::new(model_path, &env::var("WAVIFY_API_KEY")?)?;
