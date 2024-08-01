@@ -17,7 +17,7 @@ fn main() {
         "linux" => "x86_64-unknown-linux-gnu",
         "android" => "aarch64-linux-android",
         "windows" => "x86_64-pc-windows-gnu",
-        "macos" => "aarch64-apple-darwin"
+        "macos" => "aarch64-apple-darwin",
         _ => todo!(),
     };
 
