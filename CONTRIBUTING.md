@@ -2,11 +2,20 @@
 
 ## Getting started
 
-Development enviroment provided by nix:
+Clone the repository. By default, this will fetch large files from Git LFS such as libraries for different targets and models.
+
+```
+git clone git@github.com:wavify-labs/wavify-sdks.git
+
+# or this if you don't want large asset files
+GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:wavify-labs/wavify-sdks.git
+```
+
+The development enviroment is provided by nix:
 
 ```
 curl -L https://nixos.org/nix/install | sh
-nix develop # This one is optional. If direnv is installed, cd'ing into this project is enough
+nix develop 
 ```
 
 ## Usage
