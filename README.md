@@ -4,8 +4,12 @@
 ![Static Badge](https://img.shields.io/badge/platforms-Linux%20%7C%20Android%20%7C%20macOS%20%7C%20iOS%20%7C%20Windows-green)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/wavify-labs/wavify-sdks/release.yaml)
 
-Wavify is a collection of small speech models and a runtime that kicks ass and runs anywhere.
+Wavify is a collection of small speech models and a runtime that is blazingly fast and runs anywhere.
 
+
+<table>
+<tr>
+<td valign="top">
 
 ## Benchmarks
 
@@ -15,6 +19,19 @@ Running `assets/samples_jfk.wav` on a Raspberry Pi 4.
 |---|---|---|---|---|
 | Whisper.cpp <br> (-O3 with NEON)   | 75MB <br> (Whisper tiny)  | 4  | 9.2s  | 0.84  |
 | Wavify  | 45MB  | 4  | 3.8s  | 0.35  |
+
+</td>
+<td>
+
+## Demo
+
+https://github.com/user-attachments/assets/d8cf06e2-c29e-4d0f-9466-a1269b92a584
+
+</td>
+</tr>
+</table>
+
+
 
 ## Usage
 
