@@ -88,8 +88,6 @@ libs-bundle-remove:
 	rm x86_64-unknown-linux-gnu.tar.gz
 
 python-build:
-	rm -rf python/lib
-	cp -r lib/ python/lib
 	cd python && python -m build
 
 python-lint:

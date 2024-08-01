@@ -17,6 +17,7 @@ fn main() {
         "linux" => "x86_64-unknown-linux-gnu",
         "android" => "aarch64-linux-android",
         "windows" => "x86_64-pc-windows-gnu",
+        "macos" => "aarch64-apple-darwin"
         _ => todo!(),
     };
 
@@ -52,6 +53,7 @@ fn download_and_extract_library(target: &Path) -> io::Result<()> {
         "linux" => "x86_64-unknown-linux-gnu",
         "android" => "aarch64-linux-android",
         "windows" => "x86_64-pc-windows-gnu",
+        "macos" => "aarch64-apple-darwin"
         _ => todo!(),
     };
     let filename = target_triplet.to_owned() + ".tar.gz";
