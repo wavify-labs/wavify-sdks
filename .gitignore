@@ -6,9 +6,7 @@ target/
 
 # python
 venv/
-
-# models
-*.safetensors
+__pycache__
 
 # secrets
 .env
