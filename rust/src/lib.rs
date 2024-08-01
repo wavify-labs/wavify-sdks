@@ -44,6 +44,26 @@ impl std::fmt::Display for WavifyError {
     }
 }
 
+#[derive(Debug)]
+pub enum LogLevel {
+    Trace,
+    Debug,
+    Info,
+    Warn,
+    Error,
+}
+impl LogLevel {
+    fn as_str(&self) -> &str {
+        match self {
+            LogLevel::Trace => "trace",
+            LogLevel::Debug => "debug",
+            LogLevel::Info => "info",
+            LogLevel::Warn => "warn",
+            LogLevel::Error => "error",
+        }
+    }
+}
+
 impl std::error::Error for WavifyError {}
 
 extern "C" {
@@ -51,7 +71,7 @@ extern "C" {
     fn destroy_stt_engine(model: *mut SttEngineInner);
     fn stt(model: *mut SttEngineInner, data: FloatArray) -> *mut c_char;
     fn free_result(result: *mut c_char);
-    fn setup_logger();
+    fn setup_logger(level: *const c_char);
 }
 
 impl SttEngine {
@@ -160,10 +180,18 @@ impl SttEngine {
 
 /// Sets up the logger using the underlying library.
 ///
+/// Available values are: `LogLevel::Trace`, `LogLevel::Debug`, `LogLevel::Info`, `LogLevel::Warn`, `LogLevel::Error`.
+/// If `None` is provided, the log level is set to `LogLevel::Info`.
+///
+/// # Arguments
+///
+/// * `level` - The logging level. This can be `Some(LogLevel)` or `None`.
+///
 /// # Examples
 ///
 /// ```
-/// setup_logger_safe();
+/// set_log_level(Some(LogLevel::Debug)); // Sets log level to Debug
+/// set_log_level(None); // Sets log level to default (Info)
 /// ```
 ///
 /// # Panics
@@ -172,10 +200,18 @@ impl SttEngine {
 ///
 /// # Errors
 ///
-/// This function does not return any errors. Any errors during the logger setup
-/// must be handled internally by the core library.
-pub fn setup_logger_safe() {
+/// This function prints an error message if it fails to create a C-compatible string for the log level.
+
+pub fn set_log_level(level: Option<LogLevel>) {
+    let level_str = level.as_ref().unwrap_or(&LogLevel::Info).as_str();
+    let c_level = match CString::new(level_str) {
+        Ok(lev) => lev,
+        Err(e) => {
+            eprintln!("Failed to create CString for logging: {:?}", e);
+            return;
+        }
+    };
     unsafe {
-        setup_logger();
+        setup_logger(c_level.as_ptr());
     }
 }
