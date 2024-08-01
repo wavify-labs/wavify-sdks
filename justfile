@@ -74,6 +74,8 @@ libs-link:
 	cp "$IOS_SIM_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64_x86_64-simulator/WavifyCore.framework/WavifyCore
 	mv wavify_core.h lib/wavify_core.h
 	mv TensorFlowLiteC.framework lib/
+	mkdir python/lib
+	cp -r lib/aarch64-linux-android python/lib && cp -r lib/aarch64-apple-darwin python/lib  && cp -r lib/x86_64-* python/lib
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
@@ -88,11 +90,7 @@ libs-bundle-remove:
 	rm x86_64-unknown-linux-gnu.tar.gz
 
 python-build:
-	#!/usr/bin/env bash
-	mkdir python/lib
-	cp -r lib/aarch64-linux-android python/lib && cp -r lib/aarch64-apple-darwin python/lib  && cp -r lib/x86_64-* python/lib
 	cd python && python -m build
-	rm -rf lib/
 
 python-lint:
 	ruff check .
