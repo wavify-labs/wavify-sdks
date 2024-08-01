@@ -79,11 +79,13 @@ libs-link:
 
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
+	tar -czvf aarch64-apple-darwin.tar.gz lib/aarch64-apple-darwin
 	tar -czvf x86_64-pc-windows-gnu.tar.gz lib/x86_64-pc-windows-gnu
 	tar -czvf x86_64-unknown-linux-gnu.tar.gz lib/x86_64-unknown-linux-gnu
 
 libs-bundle-remove:
 	rm aarch64-linux-android.tar.gz 
+	rm aarch64-apple-darwin.tar.gz 
 	rm x86_64-pc-windows-gnu.tar.gz
 	rm x86_64-unknown-linux-gnu.tar.gz
 
@@ -102,7 +104,6 @@ python-write-documentation:
 
 rust-build:
 	rm -rf rust/lib
-	cp -r lib/ rust/lib
 	cd rust && cargo clean && cargo build
 
 rust-demo-run:

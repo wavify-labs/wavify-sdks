@@ -53,7 +53,7 @@ fn download_and_extract_library(target: &Path) -> io::Result<()> {
         "linux" => "x86_64-unknown-linux-gnu",
         "android" => "aarch64-linux-android",
         "windows" => "x86_64-pc-windows-gnu",
-        "macos" => "aarch64-apple-darwin"
+        "macos" => "aarch64-apple-darwin",
         _ => todo!(),
     };
     let filename = target_triplet.to_owned() + ".tar.gz";
@@ -75,6 +75,8 @@ fn download_and_extract_library(target: &Path) -> io::Result<()> {
 fn link_library<T: std::fmt::Display>(name: T, search_path: &PathBuf) -> bool {
     let libname = if cfg!(target_os = "windows") {
         format!("{name}.dll")
+    } else if cfg!(target_os = "macos") {
+        format!("lib{name}.dylib")
     } else {
         format!("lib{name}.so")
     };

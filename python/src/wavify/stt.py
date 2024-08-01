@@ -67,8 +67,8 @@ def default_library_path() -> (Path, Path):
     elif platform.system() == "Darwin" and platform.machine() == "arm64":
         platform_dir = base / "aarch64-apple-darwin"
         return (
-            platform_dir / "libwavify_core.so",
-            platform_dir / "libtensorflowlite_c.so",
+            platform_dir / "libwavify_core.dylib",
+            platform_dir / "libtensorflowlite_c.dylib",
         )
     else:
         return NotImplementedError
