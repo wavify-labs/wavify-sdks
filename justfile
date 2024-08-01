@@ -87,16 +87,6 @@ libs-bundle-remove:
 	rm x86_64-pc-windows-gnu.tar.gz
 	rm x86_64-unknown-linux-gnu.tar.gz
 
-ios-framework-link:
-	#!/usr/bin/env bash
-
-	if [ -z $WAVIFY_CORE_SOURCE_PATH ]; then
-		echo "The location of the of the wavify-core source is not set."
-		exit 1
-	fi
-	rm -rf lib/WavifyCore.xcframework
-	cp -r $WAVIFY_CORE_SOURCE_PATH/WavifyCore.xcframework lib/
-
 python-build:
 	rm -rf python/lib
 	cp -r lib/ python/lib

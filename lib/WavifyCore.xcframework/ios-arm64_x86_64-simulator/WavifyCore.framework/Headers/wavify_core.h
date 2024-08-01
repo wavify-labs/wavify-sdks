@@ -17,4 +17,4 @@ char *stt(struct SttEngine *stt_engine, struct FloatArray data);
 
 void free_result(char *result);
 
-void setup_logger();
+void setup_logger(const char *level);

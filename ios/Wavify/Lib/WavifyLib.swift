@@ -33,8 +33,8 @@ class SttEngine {
         return String(cString: result)
     }
 
-    static func setupLogger() {
-        setup_logger()
+    static func setupLogger(level: LogLevel) {
+        setup_logger(level.rawValue)
     }
 }
 
@@ -48,4 +48,12 @@ func convertDataToFloatArray(data: Data) -> FloatArray {
     }
 
     return FloatArray(data: floatPointer, len: UInt(count))
+}
+
+enum LogLevel: String {
+    case trace = "trace"
+    case debug = "debug"
+    case info = "info"
+    case warn = "warn"
+    case error = "error"
 }

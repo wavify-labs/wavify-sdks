@@ -21,7 +21,7 @@ char *stt(SttEngine *stt_engine, FloatArray data);
 
 void free_result(char *result);
 
-void setup_logger();
+void setup_logger(const char *level);
 
 jlong Java_dev_wavify_SttEngine_createFfi(JNIEnv env,
                                           JClass,
@@ -33,6 +33,6 @@ void Java_dev_wavify_SttEngine_destroyFfi(JNIEnv env, JClass, JString java_model
 
 jstring Java_dev_wavify_SttEngine_sttFfi(JNIEnv env, JClass, JFloatArray data, jlong java_model);
 
-void Java_dev_wavify_SttEngine_setupLoggerFfi(JNIEnv env, JClass);
+void Java_dev_wavify_Logger_setupLoggerFfi(JNIEnv env, JClass, JString log_level);
 
 } // extern "C"

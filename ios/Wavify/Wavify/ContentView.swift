@@ -21,7 +21,7 @@ struct ContentView: View {
             fatalError("Failed to find model file.")
         }
         self.modelPath = modelPath
-        SttEngine.setupLogger()
+        SttEngine.setupLogger(level: .debug)
         guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "WAVIFY_API_KEY") as? String else {
             fatalError("No api key found.")
         }
