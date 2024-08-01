@@ -73,7 +73,19 @@ val result = engine.stt(audioFloats)
 
 ### iOS
 
-Coming soon.
+Swift bindings and an example app showcasing the integration of Wavify is available in `ios/`.
+
+```swift
+guard let modelPath = Bundle.main.path(forResource: "/your/model", ofType: "bin") else {
+  fatalError("Failed to find model file.")
+}
+guard let apiKey = Bundle.main.object(forInfoDictionaryKey: "WAVIFY_API_KEY") as? String else {
+  fatalError("No api key found.")
+}
+engine = SttEngine(modelPath: modelPath, apiKey: apiKey)!
+let audioFloats: [Float] = [3.14, 2.71, 1.61]
+engine.recognizeSpeech(from: convertDataToFloatArray(data: floatValues.withUnsafeBufferPointer { Data(buffer: $0) })
+```
 
 ## Compatibility
 
@@ -87,7 +99,7 @@ Coming soon.
 
 ### Bindings
 
-Wavify comes with support for Python, Kotlin and Rust.
+Wavify comes with support for Python, Kotlin, Swift and Rust.
 Additional foreign language bindings can be developed externally and we welcome contributions to list them here. 
 Function signature are available in `lib/wavify_core.h`.
 
