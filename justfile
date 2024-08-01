@@ -102,6 +102,15 @@ python-format:
 python-write-documentation:
 	cd python/src/wavify && pydoc stt.SttEngine
 
+python-demo-run:
+	#!/usr/bin/env bash
+	set -euxo pipefail
+	cd demos/python-demo
+	source venv/bin/activate
+	source .env 
+	export WAVIFY_API_KEY=$WAVIFY_API_KEY
+	python main.py
+
 rust-build:
 	rm -rf rust/lib
 	cd rust && cargo clean && cargo build
