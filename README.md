@@ -18,11 +18,10 @@ Running `assets/samples_jfk.wav` on a Raspberry Pi 4.
 
 ## Usage
 
-Speech-to-text models for supported languages are available in `models/`. The filename specifies the language in which 
-the model operates, indicated by the ISO 639-1 code. The models are stored in the Git LFS. To convert the pointers in this
-repository to real content from Git LFS files run `git lfs fetch`.
+Speech-to-text models for supported languages are available [here](https://github.com/wavify-labs/wavify-sdks/tree/main/models). The filename specifies the language in which 
+the model operates, indicated by the ISO 639-1 code.
 
-You'll also need an API key which is available for free. You can get from your [dashboard](https://www.wavify.dev/signin/password_signin) once signed in.
+You'll also need an API key which is available for free. You can get it from your [dashboard](https://www.wavify.dev/signin/password_signin) once signed in.
 
 ### Python
 
@@ -82,7 +81,7 @@ Coming soon.
 
 - `aarch64-apple-ios`
 - `aarch64-linux-android`
-- `x86_64-apple-darwin`
+- `aarch64-apple-darwin`
 - `x86_64-pc-windows-gnu`
 - `x86_64-unknown-linux-gnu`
 
