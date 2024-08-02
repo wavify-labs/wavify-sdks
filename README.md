@@ -37,7 +37,7 @@ import os
 from wavify.stt import SttEngine
 
 engine = SttEngine("path/to/your/model", os.getenv("WAVIFY_API_KEY"))
-result = Wavify.stt_from_file("/path/to/your/file")
+result = engine.stt_from_file("/path/to/your/file")
 ```
 
 ### Rust
