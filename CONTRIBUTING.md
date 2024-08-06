@@ -11,7 +11,7 @@ git clone git@github.com:wavify-labs/wavify-sdks.git
 GIT_LFS_SKIP_SMUDGE=1 git clone git@github.com:wavify-labs/wavify-sdks.git
 ```
 
-The development enviroment is provided by nix:
+The development environment is provided by nix:
 
 ```
 curl -L https://nixos.org/nix/install | sh
