@@ -1,6 +1,6 @@
 [package]
 name = "wavify"
-version = "0.0.14"
+version = "0.0.15"
 authors = ["Manuel Plank <manuel@wavify.dev>"]
 edition = "2021"
 description = "Cross-platform and real-time speech AI including Speech-to-Text, Speech-to-Intent and Wake words"

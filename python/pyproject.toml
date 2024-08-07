@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "wavify"
-version = "0.0.14"
+version = "0.0.15"
 authors = [
   { name="Manuel Plank", email="manuel@wavify.dev" },
 ]
@@ -28,6 +28,8 @@ packages = ["src/wavify"]
 [tool.hatch.build.targets.wheel.force-include]
 "lib/x86_64-unknown-linux-gnu/libwavify_core.so" = "wavify/lib/x86_64-unknown-linux-gnu/libwavify_core.so"
 "lib/x86_64-unknown-linux-gnu/libtensorflowlite_c.so" = "wavify/lib/x86_64-unknown-linux-gnu/libtensorflowlite_c.so"
+"lib/aarch64-unknown-linux-gnu/libwavify_core.so" = "wavify/lib/aarch64-unknown-linux-gnu/libwavify_core.so"
+"lib/aarch64-unknown-linux-gnu/libtensorflowlite_c.so" = "wavify/lib/aarch64-unknown-linux-gnu/libtensorflowlite_c.so"
 "lib/aarch64-apple-darwin/libwavify_core.dylib" = "wavify/lib/aarch64-apple-darwin/libwavify_core.dylib"
 "lib/aarch64-apple-darwin/libtensorflowlite_c.dylib" = "wavify/lib/aarch64-apple-darwin/libtensorflowlite_c.dylib"
 "lib/x86_64-pc-windows-gnu/wavify_core.dll" = "wavify/lib/x86_64-pc-windows-gnu/wavify_core.dll"
