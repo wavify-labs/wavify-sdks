@@ -12,17 +12,9 @@ fn main() {
         .join("lib/");
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
 
-    let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap();
-    let lib_subdir = match target_os.as_str() {
-        "linux" => "x86_64-unknown-linux-gnu",
-        "android" => "aarch64-linux-android",
-        "windows" => "x86_64-pc-windows-gnu",
-        "macos" => "aarch64-apple-darwin",
-        _ => todo!(),
-    };
-
-    let lib_dir = dep_dir.join(lib_subdir);
-    let lib_out_dir = out_dir.join("lib/").join(lib_subdir);
+    let lib_subdir = get_target_triplet().unwrap();
+    let lib_dir = dep_dir.join(&lib_subdir);
+    let lib_out_dir = out_dir.join("lib/").join(&lib_subdir);
 
     if !lib_dir.exists() {
         // We are limited by crates.io 10MB bundle size
@@ -49,13 +41,7 @@ fn main() {
 #[cfg(feature = "download-wavify-core")]
 fn download_and_extract_library(target: &Path) -> io::Result<()> {
     let base_url = "https://nlkytncvwapfujviszuq.supabase.co/storage/v1/object/public/lib/";
-    let target_triplet = match env::var("CARGO_CFG_TARGET_OS").unwrap().as_str() {
-        "linux" => "x86_64-unknown-linux-gnu",
-        "android" => "aarch64-linux-android",
-        "windows" => "x86_64-pc-windows-gnu",
-        "macos" => "aarch64-apple-darwin",
-        _ => todo!(),
-    };
+    let target_triplet = get_target_triplet().unwrap();
     let filename = target_triplet.to_owned() + ".tar.gz";
     let url = base_url.to_owned() + &filename;
 
@@ -137,4 +123,22 @@ fn copy_dir<U: AsRef<Path>, V: AsRef<Path>>(from: U, to: V) -> Result<(), io::Er
     }
 
     Ok(())
+}
+
+fn get_target_triplet() -> anyhow::Result<String> {
+    let target_os = env::var("CARGO_CFG_TARGET_OS")?;
+    let target_arch = env::var("CARGO_CFG_TARGET_ARCH")?;
+    let triplet = match (target_os.as_str(), target_arch.as_str()) {
+        ("linux", "x86_64") => "x86_64-unknown-linux-gnu",
+        ("linux", "aarch64") => "aarch64-unknown-linux-gnu",
+        ("android", "aarch64") => "aarch64-linux-android",
+        ("windows", "x86_64") => "x86_64-pc-windows-gnu",
+        ("macos", "aarch64") => "aarch64-apple-darwin",
+        _ => anyhow::bail!(
+            "Unsupported platform or architecture: {}, {}",
+            target_os,
+            target_arch
+        ),
+    };
+    Ok(triplet.to_string())
 }

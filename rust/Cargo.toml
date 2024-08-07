@@ -17,7 +17,7 @@ include = [
 ]
 
 [features]
-default = [ "download-wavify-core" ]
+default = ["download-wavify-core"]
 download-wavify-core = []
 
 [package.metadata.docs.rs]
@@ -33,3 +33,4 @@ flate2 = "1.0.30"
 reqwest = { version = "0.12.4", features = ["blocking"] }
 tar = "0.4.41"
 tempfile = "3.10.1"
+anyhow = "1.0.86"
