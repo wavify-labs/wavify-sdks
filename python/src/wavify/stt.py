@@ -43,7 +43,7 @@ class SttEngineInner(ctypes.Structure):
     pass
 
 
-def default_library_path() -> (Path, Path):
+def default_library_path() -> tuple[Path, Path]:
     """
     Determine the default library paths based on the current platform and architecture.
 
@@ -55,23 +55,28 @@ def default_library_path() -> (Path, Path):
         NotImplementedError: If the platform or architecture is not supported.
     """
     base = Path(__file__).parent / "lib"
-    if platform.system() == "Linux" and platform.machine() == "x86_64":
-        platform_dir = base / "x86_64-unknown-linux-gnu"
-        return (
-            platform_dir / "libwavify_core.so",
-            platform_dir / "libtensorflowlite_c.so",
-        )
-    elif platform.system() == "Windows" and platform.machine() in ["x86_64", "AMD64"]:
-        platform_dir = base / "x86_64-pc-windows-gnu"
+    system = platform.system()
+    machine = platform.machine()
+
+    paths = {
+        ("Linux", "x86_64"): "x86_64-unknown-linux-gnu",
+        ("Linux", "arm64"): "aarch64-unknown-linux-gnu",
+        ("Windows", "x86_64"): "x86_64-pc-windows-gnu",
+        ("Windows", "AMD64"): "x86_64-pc-windows-gnu",
+        ("Darwin", "arm64"): "aarch64-apple-darwin",
+    }
+
+    if (system, machine) not in paths:
+        raise NotImplementedError(f"Unsupported platform or architecture: {system}, {machine}")
+
+    platform_dir = base / paths[(system, machine)]
+
+    if system == "Windows":
         return platform_dir / "wavify_core.dll", platform_dir / "tensorflowlite_c.dll"
-    elif platform.system() == "Darwin" and platform.machine() == "arm64":
-        platform_dir = base / "aarch64-apple-darwin"
-        return (
-            platform_dir / "libwavify_core.dylib",
-            platform_dir / "libtensorflowlite_c.dylib",
-        )
+    elif system == "Darwin":
+        return platform_dir / "libwavify_core.dylib", platform_dir / "libtensorflowlite_c.dylib"
     else:
-        return NotImplementedError
+        return platform_dir / "libwavify_core.so", platform_dir / "libtensorflowlite_c.so"
 
 
 def load_lib() -> CDLL:
