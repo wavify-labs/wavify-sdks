@@ -60,7 +60,7 @@ def default_library_path() -> tuple[Path, Path]:
 
     paths = {
         ("Linux", "x86_64"): "x86_64-unknown-linux-gnu",
-        ("Linux", "arm64"): "aarch64-unknown-linux-gnu",
+        ("Linux", "aarch64"): "aarch64-unknown-linux-gnu",
         ("Windows", "x86_64"): "x86_64-pc-windows-gnu",
         ("Windows", "AMD64"): "x86_64-pc-windows-gnu",
         ("Darwin", "arm64"): "aarch64-apple-darwin",
