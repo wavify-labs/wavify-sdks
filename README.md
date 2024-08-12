@@ -96,6 +96,7 @@ engine.recognizeSpeech(from: convertDataToFloatArray(data: floatValues.withUnsaf
 
 - `aarch64-apple-ios`
 - `aarch64-linux-android`
+- `aarch64-unknown-linux-gnu`
 - `aarch64-apple-darwin`
 - `x86_64-pc-windows-gnu`
 - `x86_64-unknown-linux-gnu`
@@ -113,3 +114,8 @@ Contributions to `wavify` are welcome.
 - Please report bugs as GitHub issues.
 - Questions via GitHub issues are welcome!
 - To build from source, check the [contributing page](https://github.com/wavify-labs/wavify-sdks/blob/main/CONTRIBUTING.md).
+
+## Contact
+
+For specialized solutions, including the development of custom models optimized for your specific use case, or to discuss 
+how Wavify can be adapted to meet your requirements, you can contact our team directly at founders@wavify.dev.
