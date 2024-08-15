@@ -8,6 +8,6 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.86"
 env_logger = "0.10.0"
-wavify = "0.0.12"
-# wavify = { path= "../../rust" }
+# wavify = "0.0.16"
+wavify = { path= "../../rust", default_features = false }
 

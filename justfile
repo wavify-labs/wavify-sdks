@@ -1,7 +1,49 @@
 set dotenv-load := true
 
-# Internal command for the Wavify core development team
-libs-link:
+python-build:
+	cd python && python -m build
+
+python-lint:
+	ruff check .
+
+python-format:
+	isort --profile black .
+	black .
+
+python-write-documentation:
+	cd python/src/wavify && pydoc stt.SttEngine
+
+python-demo-run:
+	#!/usr/bin/env bash
+	set -euxo pipefail
+	cd demos/python-demo
+	source venv/bin/activate
+	source .env 
+	export WAVIFY_API_KEY=$WAVIFY_API_KEY
+	python main.py
+
+rust-build:
+	rm -rf rust/lib
+	cd rust && cargo clean && cargo build
+
+rust-demo-run:
+	#!/usr/bin/env bash
+	set -euxo pipefail
+	cd demos/rust-demo
+	source .env 
+	export WAVIFY_API_KEY=$WAVIFY_API_KEY
+	cargo run
+
+rust-write-documentation:
+	cd rust && cargo doc
+
+audio-convert filename:
+	ffmpeg -i assets/{{filename}}.mp3 -ar 16000 assets/{{filename}}.wav
+
+
+### Internal commands for the Wavify core development team:
+
+libs-link-all:
 	#!/usr/bin/env bash
 
 	if [ -z $WAVIFY_CORE_SOURCE_PATH ]; then
@@ -88,6 +130,34 @@ libs-link:
 	mkdir python/lib
 	cp -r lib/aarch64-linux-android python/lib && cp -r lib/aarch64-apple-darwin python/lib  && cp -r lib/x86_64-* python/lib && cp -r lib/aarch64-unknown-linux-gnu python/lib
 
+libs-link-x86_64-linux:
+	#!/usr/bin/env bash
+
+	if [ -z $WAVIFY_CORE_SOURCE_PATH ]; then
+		echo "The location of the of the wavify-core source is not set."
+		exit 1
+	fi
+
+	LIB_LINUX="lib/x86_64-unknown-linux-gnu"
+	rm -rf $LIB_LINUX
+	mkdir -p $LIB_LINUX
+
+	# Copy libtensorflowlite_c.so, accounting for the variable hash
+	X86_64_LINUX_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
+
+	if [ -n "$X86_64_LINUX_PATH_TF" ]; then
+	    cp "$X86_64_LINUX_PATH_TF" "${LIB_LINUX}/"
+	else
+	    echo "libtensorflowlite_c.so not found for x86_64."
+	fi
+
+	X86_64_LINUX_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release/libwavify_core.so 
+
+	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
+
+	rm -rf python/lib/x86_64-unknown-linux-gnu
+	cp -rf $LIB_LINUX python/lib
+
 libs-bundle:
 	tar -czvf aarch64-linux-android.tar.gz lib/aarch64-linux-android
 	tar -czvf aarch64-apple-darwin.tar.gz lib/aarch64-apple-darwin
@@ -101,43 +171,3 @@ libs-bundle-remove:
 	rm x86_64-pc-windows-gnu.tar.gz
 	rm x86_64-unknown-linux-gnu.tar.gz
 	rm aarch64-unknown-linux-gnu.tar.gz
-
-python-build:
-	cd python && python -m build
-
-python-lint:
-	ruff check .
-
-python-format:
-	isort --profile black .
-	black .
-
-python-write-documentation:
-	cd python/src/wavify && pydoc stt.SttEngine
-
-python-demo-run:
-	#!/usr/bin/env bash
-	set -euxo pipefail
-	cd demos/python-demo
-	source venv/bin/activate
-	source .env 
-	export WAVIFY_API_KEY=$WAVIFY_API_KEY
-	python main.py
-
-rust-build:
-	rm -rf rust/lib
-	cd rust && cargo clean && cargo build
-
-rust-demo-run:
-	#!/usr/bin/env bash
-	set -euxo pipefail
-	cd demos/rust-demo
-	source .env 
-	export WAVIFY_API_KEY=$WAVIFY_API_KEY
-	cargo run
-
-rust-write-documentation:
-	cd rust && cargo doc
-
-audio-convert filename:
-	ffmpeg -i assets/{{filename}}.mp3 -ar 16000 assets/{{filename}}.wav
