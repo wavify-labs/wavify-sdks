@@ -1,4 +1,12 @@
-![The logo of Wavify.](assets/wavify-white-pink-word.svg?raw=true "Wavify logo")
+<p>
+  <a href="https://wavify.dev">
+    <picture>
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/wavify-labs/wavify-sdks/blob/main/assets/wavify-black-pink-word.svg">
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/wavify-labs/wavify-sdks/blob/main/assets/wavify-white-pink-word.svg">
+      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="500px" alt="NixOS logo">
+    </picture>
+  </a>
+</p>
 
 [![Documentation](https://img.shields.io/badge/documentation-grey)](https://www.wavify.dev/docs)
 ![Static Badge](https://img.shields.io/badge/platforms-Linux%20%7C%20Android%20%7C%20macOS%20%7C%20iOS%20%7C%20Windows-green)
