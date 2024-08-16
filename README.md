@@ -16,12 +16,12 @@ Wavify is a collection of small speech models and a runtime that is blazingly fa
 
 ## Benchmarks
 
-Running `assets/samples_jfk.wav` on a Raspberry Pi 4.
+Running `assets/samples_jfk.wav` on a Raspberry Pi 5.
 
-|Engine   |Size   |Threads   |Time   |Real-time factor   |
-|---|---|---|---|---|
-| Whisper.cpp <br> (-O3 with NEON)   | 75MB <br> (Whisper tiny)  | 4  | 9.2s  | 0.84  |
-| Wavify  | 45MB  | 4  | 3.8s  | 0.35  |
+|Engine   |Size    |Time   |Real-time factor   |
+|---|---|---|---|
+| Whisper.cpp <br>   | 75MB <br> (Whisper tiny)  | 4.91s  | 0.45  |
+| Wavify  | 45MB   | 2.21s  | 0.20  |
 
 ## Demo
 
