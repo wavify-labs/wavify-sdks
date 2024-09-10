@@ -20,7 +20,7 @@ python-demo-run:
 	source venv/bin/activate
 	source .env 
 	export WAVIFY_API_KEY=$WAVIFY_API_KEY
-	python main.py
+	python speech-to-text.py
 
 rust-build:
 	rm -rf rust/lib
