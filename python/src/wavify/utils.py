@@ -6,7 +6,7 @@ from enum import Enum
 import ctypes
 import platform
 from typing import Union
-from ctypes import CDLL, POINTER, c_char_p, c_float
+from ctypes import CDLL
 from pathlib import Path
 
 
@@ -71,16 +71,24 @@ def default_library_path() -> tuple[Path, Path]:
     }
 
     if (system, machine) not in paths:
-        raise NotImplementedError(f"Unsupported platform or architecture: {system}, {machine}")
+        raise NotImplementedError(
+            f"Unsupported platform or architecture: {system}, {machine}"
+        )
 
     platform_dir = base / paths[(system, machine)]
 
     if system == "Windows":
         return platform_dir / "wavify_core.dll", platform_dir / "tensorflowlite_c.dll"
     elif system == "Darwin":
-        return platform_dir / "libwavify_core.dylib", platform_dir / "libtensorflowlite_c.dylib"
+        return (
+            platform_dir / "libwavify_core.dylib",
+            platform_dir / "libtensorflowlite_c.dylib",
+        )
     else:
-        return platform_dir / "libwavify_core.so", platform_dir / "libtensorflowlite_c.so"
+        return (
+            platform_dir / "libwavify_core.so",
+            platform_dir / "libtensorflowlite_c.so",
+        )
 
 
 def load_lib() -> CDLL:
@@ -88,4 +96,3 @@ def load_lib() -> CDLL:
     ctypes.cdll.LoadLibrary(str(tflite_lib))
     lib = ctypes.cdll.LoadLibrary(str(wavify_lib))
     return lib
-

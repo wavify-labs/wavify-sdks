@@ -2,10 +2,8 @@
 Wavify's wakeword engine.
 """
 
-from enum import Enum
 import ctypes
-from ctypes import CDLL, POINTER, c_char_p, c_float
-from pathlib import Path
+from ctypes import POINTER, c_char_p, c_float
 import math
 
 from wavify.types import FloatArray
