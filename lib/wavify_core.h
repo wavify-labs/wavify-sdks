@@ -11,12 +11,6 @@ struct FloatArray {
   uintptr_t len;
 };
 
-enum class WakeWordStatus {
-  False = 0,
-  True = 1,
-  Failure = 2,
-};
-
 struct WakeWordEngine;
 
 extern "C" {
@@ -31,7 +25,7 @@ WakeWordEngine *create_wake_word_engine(const char *model_path, const char *api_
 
 void destroy_wake_word_engine(WakeWordEngine *wake_word_engine);
 
-WakeWordStatus detect_wake_word(WakeWordEngine *wake_word_engine, FloatArray data);
+float detect_wake_word(WakeWordEngine *wake_word_engine, FloatArray data);
 
 void free_result(char *result);
 

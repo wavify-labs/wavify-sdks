@@ -13,14 +13,29 @@ python-format:
 python-write-documentation:
 	cd python/src/wavify && pydoc stt.SttEngine
 
-python-demo-run:
+python-demo-stt-run:
 	#!/usr/bin/env bash
-	set -euxo pipefail
 	cd demos/python-demo
 	source venv/bin/activate
 	source .env 
 	export WAVIFY_API_KEY=$WAVIFY_API_KEY
 	python speech-to-text.py
+
+python-demo-wakeword-mic-run:
+	#!/usr/bin/env bash
+	cd demos/python-demo
+	source venv/bin/activate
+	source .env 
+	export WAVIFY_API_KEY=$WAVIFY_API_KEY
+	python detect-wake-word.py
+
+python-demo-wakeword-file-run:
+	#!/usr/bin/env bash
+	cd demos/python-demo
+	source venv/bin/activate
+	source .env 
+	export WAVIFY_API_KEY=$WAVIFY_API_KEY
+	python detect-wake-word.py --use-file --file-path ../../assets/samples_jfk.wav 
 
 rust-build:
 	rm -rf rust/lib

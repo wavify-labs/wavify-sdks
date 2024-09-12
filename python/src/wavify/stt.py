@@ -57,9 +57,6 @@ class SttEngine:
         self.lib.stt.argtypes = [POINTER(SttEngineInner), FloatArray]
         self.lib.stt.restype = c_char_p
 
-        self.lib.setup_logger.argtypes = [c_char_p]
-        self.lib.setup_logger.restype = None
-
         self.engine_inner = self.lib.create_stt_engine(
             model_path.encode("utf-8"), api_key.encode("utf-8")
         )

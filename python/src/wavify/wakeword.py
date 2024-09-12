@@ -6,15 +6,10 @@ from enum import Enum
 import ctypes
 from ctypes import CDLL, POINTER, c_char_p, c_float
 from pathlib import Path
+import math
 
 from wavify.types import FloatArray
 from wavify.utils import load_lib
-
-
-class WakeWordStatus(Enum):
-    False_ = 0
-    True_ = 1
-    Failure = 2
 
 
 class WakeWordEngineInner(ctypes.Structure):
@@ -59,11 +54,8 @@ class WakeWordEngine:
         self.lib.destroy_wake_word_engine.argtypes = [POINTER(WakeWordEngineInner)]
         self.lib.destroy_wake_word_engine.restype = None
 
-        self.lib.wake_word.argtypes = [POINTER(WakeWordEngineInner), FloatArray]
-        self.lib.wake_word.restype = c_char_p
-
-        self.lib.setup_logger.argtypes = [c_char_p]
-        self.lib.setup_logger.restype = None
+        self.lib.detect_wake_word.argtypes = [POINTER(WakeWordEngineInner), FloatArray]
+        self.lib.detect_wake_word.restype = c_float
 
         self.engine_inner = self.lib.create_wake_word_engine(
             model_path.encode("utf-8"), api_key.encode("utf-8")
@@ -83,17 +75,15 @@ class WakeWordEngine:
             data (list): A list of float values representing the audio data.
 
         Returns:
-            bool: True if the audio contains the wakeword.
+            float: The probability that the audio contains the wakeword.
         """
         arr = (c_float * len(data))(*data)
         float_array = FloatArray(arr, len(data))
-        status = self.lib.detect_wake_word(self.engine_inner, float_array)
-        status_enum = WakeWordStatus(status)
+        probability = self.lib.detect_wake_word(self.engine_inner, float_array)
         
-        if status_enum == WakeWordStatus.True_:
-            return True
-        elif status_enum == WakeWordStatus.False_:
-            return False
-        else:
+        if math.isnan(probability):
             raise RuntimeError("Wavify's core engine caused a runtime error.")
+        else:
+            return probability
+            
 

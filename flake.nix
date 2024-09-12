@@ -40,6 +40,7 @@
           isort
           # demo
           pip
+          pyaudio
           # benchmark
           soundfile
           inflect
@@ -68,6 +69,8 @@
             nix-tree
             ffmpeg
             sox
+            portaudio
+            libsndfile
             # rust
             rustToolchain
             # python
@@ -80,7 +83,10 @@
           ]);
           RUST_SRC_PATH = rustPlatform.rustLibSrc;
           LD_LIBRARY_PATH = lib.makeLibraryPath [
-            pkgs.stdenv.cc.cc.lib
+            stdenv.cc.cc
+            zlib
+            portaudio
+            libsndfile
           ];
         };
         packages = {
