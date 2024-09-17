@@ -47,7 +47,7 @@ rust-demo-run:
 	cd demos/rust-demo
 	source .env 
 	export WAVIFY_API_KEY=$WAVIFY_API_KEY
-	cargo run
+	cargo run --bin stt-demo
 
 rust-write-documentation:
 	cd rust && cargo doc

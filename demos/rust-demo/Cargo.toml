@@ -6,8 +6,18 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+alsa = "0.9.1"
 anyhow = "1.0.86"
+cpal = "0.15.3"
 env_logger = "0.10.0"
+hound = "3.5.1"
 # wavify = "0.0.16"
 wavify = { path= "../../rust", default_features = false }
 
+[[bin]]
+name = "stt-demo"
+path = "src/bin/stt-demo.rs"
+
+[[bin]]
+name = "wake-word-demo"
+path = "src/bin/wake-word-demo.rs"

@@ -71,6 +71,7 @@ class WakeWordEngine:
 
         Args:
             data (list): A list of float values representing the audio data.
+                The length should be equal to 2 seconds sampled at 16kHz.
 
         Returns:
             float: The probability that the audio contains the wakeword.
@@ -78,10 +79,8 @@ class WakeWordEngine:
         arr = (c_float * len(data))(*data)
         float_array = FloatArray(arr, len(data))
         probability = self.lib.detect_wake_word(self.engine_inner, float_array)
-        
+
         if math.isnan(probability):
             raise RuntimeError("Wavify's core engine caused a runtime error.")
         else:
             return probability
-            
-

@@ -10,7 +10,7 @@ from wavify.wakeword import WakeWordEngine
 from wavify.utils import LogLevel, set_log_level
 
 
-DURATION_IN_SECONDS = 1
+DURATION_IN_SECONDS = 2
 SR = 16_000
 DURATION_IN_SAMPLES = int(DURATION_IN_SECONDS * SR)
 WINDOWS = int(5 * DURATION_IN_SECONDS)
@@ -24,7 +24,7 @@ def detect_in_stream(
     relaxation_time: float,
     threshold,
 ):
-    engine = WakeWordEngine("../../models/hey-wavify.bin", os.getenv("WAVIFY_API_KEY"))
+    engine = WakeWordEngine("../../models/alexa.bin", os.getenv("WAVIFY_API_KEY"))
     last_activation_time = time()
     max_score = 0
     try:
