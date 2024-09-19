@@ -52,9 +52,6 @@ rust-demo-run:
 rust-write-documentation:
 	cd rust && cargo doc
 
-audio-convert filename:
-	ffmpeg -i assets/{{filename}}.mp3 -ar 16000 assets/{{filename}}.wav
-
 
 ### Internal commands for the Wavify core development team:
 
