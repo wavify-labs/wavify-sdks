@@ -14,9 +14,38 @@
 
 Wavify is a collection of small speech models and a runtime that is blazingly fast and runs anywhere.
 
+## Features
+
+### Tasks
+
+- [X] Speech-to-text
+- [X] Wake-word detection
+- [ ] Speech-to-intent
+
+### Bindings
+
+- [X] Python
+- [X] Kotlin
+- [X] Swift
+- [X] Rust
+- [ ] Flutter
+- [ ] C++
+
+Additional foreign language bindings can be developed externally and we welcome contributions to list them here. 
+Function signature are available in `lib/wavify_core.h`.
+
+### Platforms
+
+- `aarch64-apple-ios`
+- `aarch64-linux-android`
+- `aarch64-unknown-linux-gnu`
+- `aarch64-apple-darwin`
+- `x86_64-pc-windows-gnu`
+- `x86_64-unknown-linux-gnu`
+
 ## Benchmarks
 
-Running `assets/samples_jfk.wav` on a Raspberry Pi 5.
+Running speech-to-text on `assets/samples_jfk.wav` on a Raspberry Pi 5.
 
 |Engine   |Size    |Time   |Real-time factor   |
 |---|---|---|---|
@@ -32,6 +61,9 @@ https://github.com/user-attachments/assets/d8cf06e2-c29e-4d0f-9466-a1269b92a584
 Speech-to-text models for supported languages are available [here](https://github.com/wavify-labs/wavify-sdks/tree/main/models). The filename specifies the language in which 
 the model operates, indicated by the ISO 639-1 code.
 
+We provide the example wake-word model [model-wakeword-alexa.bin](https://github.com/wavify-labs/wavify-sdks/tree/main/models). For custom models please contact us 
+at founders@wavify.dev.
+
 You'll also need an API key which is available for free. You can get it from your [dashboard](https://www.wavify.dev/signin/password_signin) once signed in.
 
 ### Python
@@ -46,6 +78,15 @@ from wavify.stt import SttEngine
 
 engine = SttEngine("path/to/your/model", os.getenv("WAVIFY_API_KEY"))
 result = engine.stt_from_file("/path/to/your/file")
+```
+
+```python
+import os
+from wavify.wakeword import WakeWordEngine
+
+engine = WakeWordEngine("path/to/your/model", os.getenv("WAVIFY_API_KEY"))
+audio = ... # audio needs to be 2 seconds sampled at 16kHz, 16 bit linearly encoded and single channel
+result = engine.detect(audio)
 ```
 
 ### Rust
@@ -97,23 +138,6 @@ engine = SttEngine(modelPath: modelPath, apiKey: apiKey)!
 let audioFloats: [Float] = [3.14, 2.71, 1.61]
 engine.recognizeSpeech(from: convertDataToFloatArray(data: floatValues.withUnsafeBufferPointer { Data(buffer: $0) })
 ```
-
-## Compatibility
-
-### Platforms and architectures
-
-- `aarch64-apple-ios`
-- `aarch64-linux-android`
-- `aarch64-unknown-linux-gnu`
-- `aarch64-apple-darwin`
-- `x86_64-pc-windows-gnu`
-- `x86_64-unknown-linux-gnu`
-
-### Bindings
-
-Wavify comes with support for Python, Kotlin, Swift and Rust.
-Additional foreign language bindings can be developed externally and we welcome contributions to list them here. 
-Function signature are available in `lib/wavify_core.h`.
 
 ## Contributing
 
