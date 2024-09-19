@@ -233,7 +233,7 @@ impl WakeWordEngine {
     ///
     /// # Arguments
     ///
-    /// * `data` - A slice of floating-point numbers representing the audio data. The length should be equal to 1 second sampled at 16kHz.
+    /// * `data` - A slice of floating-point numbers representing the audio data. The length should be equal to 2 seconds sampled at 16kHz.
     ///
     /// # Returns
     ///

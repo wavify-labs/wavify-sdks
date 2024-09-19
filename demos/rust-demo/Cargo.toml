@@ -6,9 +6,7 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-alsa = "0.9.1"
 anyhow = "1.0.86"
-cpal = "0.15.3"
 env_logger = "0.10.0"
 hound = "3.5.1"
 # wavify = "0.0.16"
