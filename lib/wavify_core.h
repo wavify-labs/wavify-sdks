@@ -11,6 +11,8 @@ struct FloatArray {
   uintptr_t len;
 };
 
+struct WakeWordEngine;
+
 extern "C" {
 
 SttEngine *create_stt_engine(const char *model_path, const char *api_key);
@@ -18,6 +20,12 @@ SttEngine *create_stt_engine(const char *model_path, const char *api_key);
 void destroy_stt_engine(SttEngine *stt_engine);
 
 char *stt(SttEngine *stt_engine, FloatArray data);
+
+WakeWordEngine *create_wake_word_engine(const char *model_path, const char *api_key);
+
+void destroy_wake_word_engine(WakeWordEngine *wake_word_engine);
+
+float detect_wake_word(WakeWordEngine *wake_word_engine, FloatArray data);
 
 void free_result(char *result);
 

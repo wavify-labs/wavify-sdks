@@ -8,6 +8,14 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.86"
 env_logger = "0.10.0"
-# wavify = "0.0.16"
-wavify = { path= "../../rust", default_features = false }
+hound = "3.5.1"
+wavify = "0.0.17"
+# wavify = { path= "../../rust", default_features = false }
 
+[[bin]]
+name = "stt-demo"
+path = "src/bin/stt-demo.rs"
+
+[[bin]]
+name = "wake-word-demo"
+path = "src/bin/wake-word-demo.rs"

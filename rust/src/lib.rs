@@ -1,6 +1,6 @@
 use hound::WavReader;
 use std::ffi::{CStr, CString};
-use std::os::raw::c_char;
+use std::os::raw::{c_char, c_float};
 
 #[macro_use]
 extern crate log;
@@ -71,6 +71,12 @@ extern "C" {
     fn destroy_stt_engine(model: *mut SttEngineInner);
     fn stt(model: *mut SttEngineInner, data: FloatArray) -> *mut c_char;
     fn free_result(result: *mut c_char);
+    fn create_wake_word_engine(
+        model_path: *const c_char,
+        api_key: *const c_char,
+    ) -> *mut WakeWordEngineInner;
+    fn destroy_wake_word_engine(model: *mut WakeWordEngineInner);
+    fn detect_wake_word(model: *mut WakeWordEngineInner, data: FloatArray) -> c_float;
     fn setup_logger(level: *const c_char);
 }
 
@@ -175,6 +181,82 @@ impl SttEngine {
         );
 
         self.stt(&data)
+    }
+}
+
+/// Represents the Speech-to-Text Engine.
+pub struct WakeWordEngine {
+    inner: *mut WakeWordEngineInner,
+}
+
+#[repr(C)]
+struct WakeWordEngineInner {
+    // C ABI does not allow zero-sized structs so we add a dummy field
+    _dummy: c_char,
+}
+
+impl WakeWordEngine {
+    /// Creates a new instance of `WakeWordEngine`.
+    ///
+    /// # Arguments
+    ///
+    /// * `model_path` - A string slice that holds the path to the model.
+    /// * `api_key` - A string slice that holds the API key.
+    ///
+    /// # Returns
+    ///
+    /// A result that, if successful, contains a new instance of `WakeWordEngine`. Otherwise, it contains a `WavifyError`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let engine = WakeWordEngine::new("path/to/model", "api_key");
+    /// ```
+    pub fn new(model_path: &str, api_key: &str) -> Result<WakeWordEngine, WavifyError> {
+        let maybe_model_path_c = CString::new(model_path);
+        let maybe_api_key_c = CString::new(api_key);
+        match (maybe_model_path_c, maybe_api_key_c) {
+            (Ok(model_path_c), Ok(api_key_c)) => unsafe {
+                let inner = create_wake_word_engine(model_path_c.as_ptr(), api_key_c.as_ptr());
+                Ok(WakeWordEngine { inner })
+            },
+            (_, _) => Err(WavifyError::InitError),
+        }
+    }
+
+    /// Destroys the `WakeWordEngine` instance, freeing any resources.
+    pub fn destroy(self) {
+        unsafe { destroy_wake_word_engine(self.inner) }
+    }
+
+    /// Performs the wake word detection  on the given audio data.
+    ///
+    /// # Arguments
+    ///
+    /// * `data` - A slice of floating-point numbers representing the audio data. The length should be equal to 2 seconds sampled at 16kHz.
+    ///
+    /// # Returns
+    ///
+    /// A result that, if successful, contains the probability of a detected wake word. Otherwise, it contains a `WavifyError`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// let probability = engine.detect(&audio_data).unwrap();
+    /// ```
+    pub fn detect(&self, data: &[f32]) -> Result<f32, WavifyError> {
+        let float_array = FloatArray {
+            data: data.as_ptr(),
+            len: data.len(),
+        };
+
+        unsafe {
+            let result = detect_wake_word(self.inner, float_array);
+            if result.is_nan() {
+                return Err(WavifyError::InferenceError);
+            }
+            Ok(result)
+        }
     }
 }
 

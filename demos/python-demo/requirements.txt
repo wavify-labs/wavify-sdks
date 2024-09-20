@@ -1,1 +1,3 @@
-wavify==0.0.12
+wavify==0.0.17
+pyaudio
+numpy
