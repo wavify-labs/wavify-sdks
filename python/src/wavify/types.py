@@ -5,6 +5,7 @@ Types used internally by Wavify.
 import ctypes
 from ctypes import POINTER, c_float, c_uint64
 
+
 class FloatArray(ctypes.Structure):
     """
     A ctypes structure that represents an array of floats.

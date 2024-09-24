@@ -30,14 +30,16 @@ class SttEngine:
             the inner STT engine structure.
     """
 
-    def __init__(self, model_path: str, api_key: str, lib_path=None):
+    def __init__(self, model_path: str, language: str, api_key: str, lib_path=None):
         """
         Initialize the STT engine.
 
         Args:
             model_path (str): The path to the model file.
+            language(str): The language as given by the ISO 639-1 code.
+                For example, 'en' for English.
             api_key (str): The API key for authentication.
-                lib_path (Path, optional): The path to the library.
+            lib_path (Path, optional): The path to the library.
                 If None, default paths will be used.
 
         Raises:
@@ -48,7 +50,7 @@ class SttEngine:
         else:
             raise NotImplementedError
 
-        self.lib.create_stt_engine.argtypes = [c_char_p, c_char_p]
+        self.lib.create_stt_engine.argtypes = [c_char_p, c_char_p, c_char_p]
         self.lib.create_stt_engine.restype = POINTER(SttEngineInner)
 
         self.lib.destroy_stt_engine.argtypes = [POINTER(SttEngineInner)]
@@ -58,7 +60,9 @@ class SttEngine:
         self.lib.stt.restype = c_char_p
 
         self.engine_inner = self.lib.create_stt_engine(
-            model_path.encode("utf-8"), api_key.encode("utf-8")
+            model_path.encode("utf-8"),
+            language.encode("utf-8"),
+            api_key.encode("utf-8"),
         )
 
     def destroy(self):
@@ -97,5 +101,3 @@ class SttEngine:
         data = list(struct.unpack(f"<{n}h", wavedata))
         float_data = [sample / 32767 for sample in data]
         return self.stt(float_data)
-
-

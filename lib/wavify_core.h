@@ -15,7 +15,7 @@ struct WakeWordEngine;
 
 extern "C" {
 
-SttEngine *create_stt_engine(const char *model_path, const char *api_key);
+SttEngine *create_stt_engine(const char *model_path, const char *language, const char *api_key);
 
 void destroy_stt_engine(SttEngine *stt_engine);
 
@@ -34,6 +34,7 @@ void setup_logger(const char *level);
 jlong Java_dev_wavify_SttEngine_createFfi(JNIEnv env,
                                           JClass,
                                           JString java_model_path,
+                                          JString java_language,
                                           JString java_api_key,
                                           JString java_app_name);
 

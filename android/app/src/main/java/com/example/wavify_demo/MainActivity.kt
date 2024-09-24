@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val apiKey = BuildConfig.WAVIFY_AP_KEY
         val appName = applicationContext.packageName
         Logger.setLogLevel(LogLevel.DEBUG)
-        val engine = SttEngine.create(modelPath, apiKey, appName)
+        val engine = SttEngine.create(modelPath, "en", apiKey, appName)
         engine
     }
 

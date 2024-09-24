@@ -6,7 +6,11 @@ from wavify.stt import SttEngine
 from wavify.utils import LogLevel, set_log_level
 
 set_log_level(LogLevel.DEBUG)
-engine = SttEngine("../../models/model-en.bin", os.getenv("WAVIFY_API_KEY"))
+engine = SttEngine(
+    model_path="../../models/model-en.bin",
+    language="en",
+    api_key=os.getenv("WAVIFY_API_KEY"),
+)
 
 now = time()
 result_file = engine.stt_from_file(

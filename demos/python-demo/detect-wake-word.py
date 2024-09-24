@@ -24,7 +24,9 @@ def detect_in_stream(
     relaxation_time: float,
     threshold,
 ):
-    engine = WakeWordEngine("../../models/model-wakeword-alexa.bin", os.getenv("WAVIFY_API_KEY"))
+    engine = WakeWordEngine(
+        "../../models/model-wakeword-alexa.bin", os.getenv("WAVIFY_API_KEY")
+    )
     last_activation_time = time()
     max_score = 0
     try:

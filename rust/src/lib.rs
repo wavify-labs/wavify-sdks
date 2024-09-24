@@ -67,7 +67,11 @@ impl LogLevel {
 impl std::error::Error for WavifyError {}
 
 extern "C" {
-    fn create_stt_engine(model_path: *const c_char, api_key: *const c_char) -> *mut SttEngineInner;
+    fn create_stt_engine(
+        model_path: *const c_char,
+        language: *const c_char,
+        api_key: *const c_char,
+    ) -> *mut SttEngineInner;
     fn destroy_stt_engine(model: *mut SttEngineInner);
     fn stt(model: *mut SttEngineInner, data: FloatArray) -> *mut c_char;
     fn free_result(result: *mut c_char);
@@ -86,6 +90,7 @@ impl SttEngine {
     /// # Arguments
     ///
     /// * `model_path` - A string slice that holds the path to the model.
+    /// * `language` - A string slice that holds the language given by the ISO 639-1 code.
     /// * `api_key` - A string slice that holds the API key.
     ///
     /// # Returns
@@ -95,17 +100,23 @@ impl SttEngine {
     /// # Examples
     ///
     /// ```
-    /// let engine = SttEngine::new("path/to/model", "api_key");
+    /// let engine = SttEngine::new("path/to/model", "en", "api_key");
     /// ```
-    pub fn new(model_path: &str, api_key: &str) -> Result<SttEngine, WavifyError> {
-        let maybe_model_path_c = CString::new(model_path);
-        let maybe_api_key_c = CString::new(api_key);
-        match (maybe_model_path_c, maybe_api_key_c) {
-            (Ok(model_path_c), Ok(api_key_c)) => unsafe {
-                let inner = create_stt_engine(model_path_c.as_ptr(), api_key_c.as_ptr());
-                Ok(SttEngine { inner })
-            },
-            (_, _) => Err(WavifyError::InitError),
+    pub fn new(model_path: &str, language: &str, api_key: &str) -> Result<SttEngine, WavifyError> {
+        let model_path_c = CString::new(model_path).map_err(|_| Err(WavifyError::InitError))?;
+        let language_c = CString::new(language).map_err(|_| Err(WavifyError::InitError))?;
+        let api_key_c = CString::new(api_key).map_err(|_| Err(WavifyError::InitError))?;
+        let inner = unsafe {
+            create_stt_engine(
+                model_path_c.as_ptr(),
+                language_c.as_ptr(),
+                api_key_c.as_ptr(),
+            )
+        };
+        if inner.is_null() {
+            Err(WavifyError::InitError)
+        } else {
+            Ok(SttEngine { inner })
         }
     }
 

@@ -30,7 +30,7 @@ class SttEngine private constructor(private val nativeHandle: Long) {
         val TAG: String = "Wavify"
 
         @JvmStatic
-        external fun createFfi(modelPath: String, apiKey: String, appName: String): Long
+        external fun createFfi(modelPath: String, language: String, apiKey: String, appName: String): Long
 
         @JvmStatic
         external fun destroyFfi(engineHandle: Long)
@@ -38,14 +38,14 @@ class SttEngine private constructor(private val nativeHandle: Long) {
         @JvmStatic
         external fun sttFfi(data: FloatArray, engineHandle: Long): String
 
-        fun create(modelPath: String, apiKey: String, appName: String): SttEngine {
+        fun create(modelPath: String, language: String, apiKey: String, appName: String): SttEngine {
 
             Log.d(TAG,"linking libraries")
             System.loadLibrary("wavify_core")
             System.loadLibrary("tensorflowlite_c")
 
             Log.d(TAG, "initializing engine")
-            val handle = createFfi(modelPath, apiKey, appName)
+            val handle = createFfi(modelPath, language, apiKey, appName)
             return SttEngine(handle)
         }
     }

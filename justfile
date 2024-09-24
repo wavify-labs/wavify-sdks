@@ -55,7 +55,7 @@ rust-write-documentation:
 
 ### Internal commands for the Wavify core development team:
 
-libs-link-all:
+libs-link:
 	#!/usr/bin/env bash
 
 	if [ -z $WAVIFY_CORE_SOURCE_PATH ]; then
@@ -63,32 +63,30 @@ libs-link-all:
 		exit 1
 	fi
 
-	cp lib/wavify_core.h .
-	cp -rf lib/WavifyCore.xcframework .
-	cp -rf lib/TensorFlowLiteC.framework .
-	rm -rf lib/
-	rm -rf python/lib/
-
-	LIB_AARC 64="lib/aarch64-linux-android"
+	LIB_AARCH64="lib/aarch64-linux-android"
 	LIB_LINUX="lib/x86_64-unknown-linux-gnu"
 	LIB_LINUX_ARM64="lib/aarch64-unknown-linux-gnu"
 	LIB_WINDOWS="lib/x86_64-pc-windows-gnu"
-	LIB_MACOS="lib/aarch64-apple-darwin"
-	LIB_IOS="lib/aarch64-apple-ios"
+
+	rm -rf $LIB_AARCH64
+	rm -rf $LIB_LINUX
+	rm -rf $LIB_LINUX_ARM64
+	rm -rf $LIB_WINDOWS
+	rm -rf "python/${LIB_AARCH64}"
+	rm -rf "python/${LIB_LINUX}"
+	rm -rf "python/${LIB_LINUX_ARM64}"
+	rm -rf "python/${LIB_WINDOWS}"
 
 	mkdir -p $LIB_AARCH64
 	mkdir -p $LIB_LINUX
 	mkdir -p $LIB_LINUX_ARM64
 	mkdir -p $LIB_WINDOWS
-	mkdir -p $LIB_MACOS
-	mkdir -p $LIB_IOS
 
 	# Copy libtensorflowlite_c.so, accounting for the variable hash
 	AARCH64_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-linux-android/aarch64-linux-android/release -name libtensorflowlite_c.so -print -quit)
 	X86_64_LINUX_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
 	ARM64_LINUX_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-unknown-linux-gnu/aarch64-unknown-linux-gnu/release -name libtensorflowlite_c.so -print -quit)
 	WINDOWS_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release -name tensorflowlite_c.dll -print -quit)
-	MAC_PATH_TF=$(find $WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-darwin/aarch64-apple-darwin/release -name libtensorflowlite_c.dylib -print -quit)
 
 	if [ -n "$AARCH64_PATH_TF" ]; then
 	    cp "$AARCH64_PATH_TF" "${LIB_AARCH64}/"
@@ -114,33 +112,17 @@ libs-link-all:
 	    echo "tensorflowlite_c.dll not found for Windows."
 	fi
 
-	if [ -n "$MAC_PATH_TF" ]; then
-	    cp "$MAC_PATH_TF" "${LIB_MACOS}/"
-	else
-	    echo "libtensorflowlite_c.so not found for MacOS."
-	fi
-
 	AARCH64_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-linux-android/aarch64-linux-android/release/libwavify_core.so 
 	X86_64_LINUX_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-unknown-linux-gnu/x86_64-unknown-linux-gnu/release/libwavify_core.so 
 	ARM64_LINUX_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-unknown-linux-gnu/aarch64-unknown-linux-gnu/release/libwavify_core.so 
 	WINDOWS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/x86_64-pc-windows-gnu/x86_64-pc-windows-gnu/release/wavify_core.dll
-	MACOS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-darwin/aarch64-apple-darwin/release/libwavify_core.dylib
-	IOS_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/build/aarch64-apple-ios/aarch64-apple-ios/release/libwavify_core.a
-	IOS_SIM_PATH_WAVIFY=$WAVIFY_CORE_SOURCE_PATH/target/libwavify_core_fat.a
 
 	cp "$AARCH64_PATH_WAVIFY" "${LIB_AARCH64}/"
 	cp "$X86_64_LINUX_PATH_WAVIFY" "${LIB_LINUX}/"
 	cp "$ARM64_LINUX_PATH_WAVIFY" "${LIB_LINUX_ARM64}/"
 	cp "$WINDOWS_PATH_WAVIFY" "${LIB_WINDOWS}/"
-	cp "$MACOS_PATH_WAVIFY" "${LIB_MACOS}/"
-	cp "$IOS_PATH_WAVIFY" "${LIB_IOS}/"
-	mv WavifyCore.xcframework lib/
-	cp "$IOS_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64/WavifyCore.framework/WavifyCore
-	cp "$IOS_SIM_PATH_WAVIFY" lib/WavifyCore.xcframework/ios-arm64_x86_64-simulator/WavifyCore.framework/WavifyCore
-	mv wavify_core.h lib/wavify_core.h
-	mv TensorFlowLiteC.framework lib/
 	mkdir python/lib
-	cp -r lib/aarch64-linux-android python/lib && cp -r lib/aarch64-apple-darwin python/lib  && cp -r lib/x86_64-* python/lib && cp -r lib/aarch64-unknown-linux-gnu python/lib
+	cp -r lib/aarch64-linux-android python/lib && cp -r lib/x86_64-* python/lib && cp -r lib/aarch64-unknown-linux-gnu python/lib
 
 
 libs-link-apple:
