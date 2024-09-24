@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private val engine: SttEngine by lazy {
-        val modelPath = File(applicationContext.filesDir, "model-en.bin").absolutePath
+        val modelPath = File(applicationContext.filesDir, "model-en-turbo.bin").absolutePath
         val apiKey = BuildConfig.WAVIFY_AP_KEY
         val appName = applicationContext.packageName
         Logger.setLogLevel(LogLevel.DEBUG)

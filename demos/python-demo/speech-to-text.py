@@ -7,7 +7,7 @@ from wavify.utils import LogLevel, set_log_level
 
 set_log_level(LogLevel.DEBUG)
 engine = SttEngine(
-    model_path="../../models/model-en.bin",
+    model_path="../../models/model-en-turbo.bin",
     language="en",
     api_key=os.getenv("WAVIFY_API_KEY"),
 )

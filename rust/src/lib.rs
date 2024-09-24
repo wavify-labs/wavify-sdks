@@ -103,9 +103,9 @@ impl SttEngine {
     /// let engine = SttEngine::new("path/to/model", "en", "api_key");
     /// ```
     pub fn new(model_path: &str, language: &str, api_key: &str) -> Result<SttEngine, WavifyError> {
-        let model_path_c = CString::new(model_path).map_err(|_| Err(WavifyError::InitError))?;
-        let language_c = CString::new(language).map_err(|_| Err(WavifyError::InitError))?;
-        let api_key_c = CString::new(api_key).map_err(|_| Err(WavifyError::InitError))?;
+        let model_path_c = CString::new(model_path).map_err(|_| WavifyError::InitError)?;
+        let language_c = CString::new(language).map_err(|_| WavifyError::InitError)?;
+        let api_key_c = CString::new(api_key).map_err(|_| WavifyError::InitError)?;
         let inner = unsafe {
             create_stt_engine(
                 model_path_c.as_ptr(),

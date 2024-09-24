@@ -8,7 +8,10 @@ fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
 
     let (model_path, file_path) = if args.len() < 3 {
-        ("../../models/model-en.bin", "../../assets/samples_jfk.wav")
+        (
+            "../../models/model-en-turbo.bin",
+            "../../assets/samples_jfk.wav",
+        )
     } else {
         (&args[1] as &str, &args[2] as &str)
     };
