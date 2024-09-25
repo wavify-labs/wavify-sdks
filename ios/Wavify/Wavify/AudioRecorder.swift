@@ -10,7 +10,7 @@ import Foundation
 
 private let kSampleRate: Int = 16000
 
-class AudioRecorder {
+class AudioRecorder: ObservableObject {
   typealias RecordingBufferAndData = (buffer: AVAudioBuffer, data: Data)
   typealias RecordResult = Result<RecordingBufferAndData, Error>
   typealias RecordingDoneCallback = (RecordResult) -> Void
@@ -21,6 +21,9 @@ class AudioRecorder {
 
   private var recorderDelegate: RecorderDelegate?
   private var recorder: AVAudioRecorder?
+    
+  @Published var audioLevel: Float = 0.0
+  private var meteringTimer: Timer?
 
   func startRecording(callback: @escaping RecordingDoneCallback) {
     let session = AVAudioSession.sharedInstance()
@@ -48,6 +51,7 @@ class AudioRecorder {
 
         let recorder = try AVAudioRecorder(url: recordingUrl, settings: formatSettings)
         self.recorder = recorder
+        recorder.isMeteringEnabled = true
 
         let delegate = RecorderDelegate(callback: callback)
         recorder.delegate = delegate
@@ -56,6 +60,8 @@ class AudioRecorder {
         guard recorder.record() else {
           throw AudioRecorderError.Error(message: "Failed to start recording.")
         }
+          
+        self.startMetering()
 
       } catch {
         callback(.failure(error))
@@ -65,6 +71,27 @@ class AudioRecorder {
 
   func stopRecording() {
     recorder?.stop()
+    stopMetering()
+  }
+    
+  // For the sound wave animation
+  private func startMetering() {
+      meteringTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+        self.recorder?.updateMeters()
+        if let averagePower = self.recorder?.averagePower(forChannel: 0) {
+            DispatchQueue.main.async {
+                let minLevel: Float = -60.0
+                let maxLevel: Float = 0.0
+                let clampedLevel = max(minLevel, min(averagePower, maxLevel))
+                self.audioLevel = (clampedLevel - minLevel) / (maxLevel - minLevel)
+            }
+        }
+    }
+  }
+
+  private func stopMetering() {
+    meteringTimer?.invalidate()
+    meteringTimer = nil
   }
 
   private class RecorderDelegate: NSObject, AVAudioRecorderDelegate {

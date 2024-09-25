@@ -11,8 +11,39 @@ enum WavifyError: Error {
     case runtimeError(String)
 }
 
+struct SoundWaveAnimation: View {
+    var audioLevel: Float
+    @State private var barHeights: [CGFloat] = Array(repeating: 10, count: 15)
+    private let numberOfBars = 15
+
+    var body: some View {
+        HStack(alignment: .center, spacing: 4) {
+            ForEach(0..<numberOfBars, id: \.self) { index in
+                Capsule()
+                    .fill(Color(red: 218/255, green: 70/255, blue: 240/255).opacity(0.7))
+                    .frame(width: 6, height: barHeights[index])
+                    .animation(.easeInOut(duration: 0.1), value: barHeights[index])
+            }
+        }
+        .onChange(of: audioLevel) { newLevel in
+            withAnimation(.easeInOut(duration: 0.1)) {
+                barHeights = barHeights.map { _ in barHeight(for: newLevel) }
+            }
+        }
+    }
+
+    private func barHeight(for level: Float) -> CGFloat {
+        let baseHeight: CGFloat = 10
+        let maxHeight: CGFloat = 60
+        let adjustedLevel = CGFloat(level) * maxHeight
+        let randomOffset = CGFloat.random(in: -5...5)
+        return baseHeight + adjustedLevel + randomOffset
+    }
+}
+
+
 struct ContentView: View {
-    private let audioRecorder = AudioRecorder()
+    @StateObject private var audioRecorder = AudioRecorder()
     private let modelPath: String
     private let engine: SttEngine
 
@@ -30,7 +61,6 @@ struct ContentView: View {
 
     @State private var message: String = ""
     @State private var successful: Bool = true
-
     @State private var readyToRecord: Bool = true
 
     private func recordAndRecognize() {
@@ -74,6 +104,7 @@ struct ContentView: View {
 
         Button("Record") {
             readyToRecord = false
+            message = ""
             recordAndRecognize()
             }
             .padding()
@@ -85,6 +116,12 @@ struct ContentView: View {
             }
             .padding()
             .disabled(readyToRecord)
+          
+        if !readyToRecord {
+            SoundWaveAnimation(audioLevel: audioRecorder.audioLevel)
+                .frame(height: 80)
+                .padding()
+          }
 
         Text("\(message)")
               .foregroundColor(successful ? .none : .red)
