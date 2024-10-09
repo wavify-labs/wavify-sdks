@@ -3,7 +3,7 @@
     <picture>
       <source media="(prefers-color-scheme: light)" srcset="https://github.com/wavify-labs/wavify-sdks/blob/main/assets/wavify-black-pink-word.svg">
       <source media="(prefers-color-scheme: dark)" srcset="https://github.com/wavify-labs/wavify-sdks/blob/main/assets/wavify-white-pink-word.svg">
-      <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="500px" alt="NixOS logo">
+      <img src="https://github.com/wavify-labs/wavify-sdks/blob/main/assets/wavify-white-pink-word.svg" width="500px" alt="Wavify logo">
     </picture>
   </a>
 </p>
