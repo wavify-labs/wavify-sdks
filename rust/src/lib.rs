@@ -283,7 +283,6 @@ impl WakeWordEngine {
 /// # Errors
 ///
 /// This function prints an error message if it fails to create a C-compatible string for the log level.
-
 pub fn set_log_level(level: Option<LogLevel>) {
     let level_str = level.as_ref().unwrap_or(&LogLevel::Info).as_str();
     let c_level = match CString::new(level_str) {
