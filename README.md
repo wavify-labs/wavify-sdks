@@ -14,6 +14,12 @@
 
 Wavify is a collection of small speech models and a runtime that is blazingly fast and runs anywhere.
 
+
+> [!IMPORTANT] 
+> We regret to inform you that we must stop our development roadmap. Due to current funding constraints and related challenges, we cannot deliver new features or updates for the foreseeable future.
+> 
+> The Wavify Team
+
 ## Features
 
 ### Tasks
